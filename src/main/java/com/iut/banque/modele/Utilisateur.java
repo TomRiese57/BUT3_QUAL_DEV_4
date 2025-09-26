@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.iut.banque.cyptage.PasswordHasher;
 import com.iut.banque.exceptions.IllegalFormatException;
 
 /**
@@ -157,7 +158,7 @@ public abstract class Utilisateur {
 	 *            : le mot de passe de l'utilisateur
 	 */
 	public void setUserPwd(String userPwd) {
-		this.userPwd = userPwd;
+		this.userPwd = PasswordHasher.hashPassword(userPwd);
 	}
 
 	/**

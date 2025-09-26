@@ -10,6 +10,8 @@ import com.iut.banque.exceptions.TechnicalException;
 import com.iut.banque.facade.BanqueFacade;
 import com.opensymphony.xwork2.ActionSupport;
 
+import com.iut.banque.cyptage.PasswordHasher;
+
 public class CreerUtilisateur extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
@@ -97,7 +99,7 @@ public class CreerUtilisateur extends ActionSupport {
 	 *            the userPwd to set
 	 */
 	public void setUserPwd(String userPwd) {
-		this.userPwd = userPwd;
+		this.userPwd = PasswordHasher.hashPassword(userPwd);
 	}
 
 	/**
