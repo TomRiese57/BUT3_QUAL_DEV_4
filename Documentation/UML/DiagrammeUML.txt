@@ -1,0 +1,71 @@
+@startuml
+
+  abstract class Utilisateur {
+  - userId : String
+  - userPwd : String
+  - nom : String
+  - prenom : String
+  - adresse : String
+  - male : boolean
+  + toString() : String
+}
+
+class Client {
+  - numeroClient : String
+  - accounts : Map<String, Compte>
+  + addAccount(compte : Compte)
+  + toString() : String
+  + setUserId(): String
+  + getIdentity() : String
+  + possedeComptesADecouvert() : boolean
+  + getComptesAvecSoldeNonNul() : Map<String, Compte>
+}
+
+class Gestionnaire {
+  + toString() : String
+}
+
+class Banque {
+  - clients : Map<String, Client>
+  - gestionnaires : Map<String, Gestionnaire>
+  - accounts : Map<String, Compte>
+  + debiter(compte : Compte, montant : double)
+  + crediter(compte : Compte, montant : double)
+  + deleteUser(userId : String)
+  + changeDecouvert(compte : CompteAvecDecouvert, nouveauDecouvert : double)
+}
+
+abstract class Compte {
+  # numeroCompte : String
+  # solde : double
+  # owner : Client
+  + crediter(montant : double)
+  + debiter(montant : double)
+  + getClassName() : String
+  + toString() : String
+}
+
+class CompteAvecDecouvert {
+  - decouvertAutorise : double
+  + getDecouvertAutorise() : double
+  + setDecouverAutorise(decouvertAutorise : double)
+  + debiter(montant : double)
+  + toString() : String
+}
+
+class CompteSansDecouvert {
+  + debiter(montant : double)
+  + toString() : String
+}
+
+Utilisateur <|-- Client
+Utilisateur <|-- Gestionnaire
+Compte <|-- CompteAvecDecouvert
+Compte <|-- CompteSansDecouvert
+Client "1" o-- "*" Compte : accounts
+Compte "*" --> "1" Client : owner
+Banque "1" o-- "*" Client : clients
+Banque "1" o-- "*" Gestionnaire : gestionnaires
+Banque "1" o-- "*" Compte : accounts
+
+@enduml
