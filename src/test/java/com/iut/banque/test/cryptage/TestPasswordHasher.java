@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iut.banque.cyptage.PasswordHasher;
+import com.iut.banque.cryptage.PasswordHasher;
 
 public class TestPasswordHasher {
 

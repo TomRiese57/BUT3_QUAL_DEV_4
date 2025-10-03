@@ -10,7 +10,7 @@ import com.iut.banque.exceptions.TechnicalException;
 import com.iut.banque.facade.BanqueFacade;
 import com.opensymphony.xwork2.ActionSupport;
 
-import com.iut.banque.cyptage.PasswordHasher;
+import com.iut.banque.cryptage.PasswordHasher;
 
 public class CreerUtilisateur extends ActionSupport {
 

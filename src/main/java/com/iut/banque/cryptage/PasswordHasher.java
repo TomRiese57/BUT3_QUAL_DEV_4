@@ -1,4 +1,4 @@
-package com.iut.banque.cyptage;
+package com.iut.banque.cryptage;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,6 +31,12 @@ public class PasswordHasher {
     public static boolean verify(String password, String storedHash) {
         String hashedPassword = hashPassword(password);
         return hashedPassword.equals(storedHash);
+    }
+
+    public static void main(String[] args) {
+        String password = "WRONG PASS";
+        String storedHash = hashPassword(password);
+        System.out.println(storedHash);
     }
 }
 
