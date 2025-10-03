@@ -32,5 +32,11 @@ public class PasswordHasher {
         String hashedPassword = hashPassword(password);
         return hashedPassword.equals(storedHash);
     }
+
+    public static void main(String[] args) {
+        String password = "TEST PASS";
+        String storedHash = hashPassword(password);
+        System.out.println(storedHash);
+    }
 }
 

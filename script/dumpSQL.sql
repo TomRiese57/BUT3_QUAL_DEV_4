@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `Utilisateur` (
   `nom` varchar(45) NOT NULL,
   `prenom` varchar(45) NOT NULL,
   `adresse` varchar(100) NOT NULL,
-  `userPwd` varchar(45) DEFAULT NULL,
+  `userPwd` varchar(64) DEFAULT NULL,
   `male` bit(1) NOT NULL,
   `type` varchar(10) NOT NULL,
   `numClient` varchar(45) DEFAULT NULL,
@@ -68,10 +68,10 @@ CREATE TABLE IF NOT EXISTS `Utilisateur` (
 --
 
 INSERT INTO `Utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `male`, `type`, `numClient`) VALUES
-('a', 'a', 'a', 'a', 'a', b'1', 'MANAGER', NULL),
-('admin', 'Smith', 'Joe', '123, grande rue, Metz', 'adminpass', b'1', 'MANAGER', ''),
-('client1', 'client1', 'Jane', '45, grand boulevard, Brest', 'clientpass1', b'1', 'CLIENT', '123456789'),
-('client2', 'client2', 'Jane', '45, grand boulevard, Brest', 'clientpass2', b'1', 'CLIENT', '123456788');
+('a', 'a', 'a', 'a', 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb', b'1', 'MANAGER', NULL),
+('admin', 'Smith', 'Joe', '123, grande rue, Metz', '713bfda78870bf9d1b261f565286f85e97ee614efe5f0faf7c34e7ca4f65baca', b'1', 'MANAGER', ''),
+('client1', 'client1', 'Jane', '45, grand boulevard, Brest', '11fa5aade33a4f8ea1cbf309f610092bdf7e50526ffdc08f17b0ea046f97961f', b'1', 'CLIENT', '123456789'),
+('client2', 'client2', 'Jane', '45, grand boulevard, Brest', '699a3eec2c9f94989c141222ea8083e02e3d8174a749816e789fcd583878aa75', b'1', 'CLIENT', '123456788');
 
 --
 -- Constraints for dumped tables
