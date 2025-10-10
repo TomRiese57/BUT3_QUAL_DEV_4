@@ -19,7 +19,10 @@ class Client {
   + getIdentity() : String
   + possedeComptesADecouvert() : boolean
   + getComptesAvecSoldeNonNul() : Map<String, Compte>
+  + checkFormatUserIdClient(s: String) : Boolean
+  + checkFormatNumeroClient(s: String) : Boolean
 }
+
 
 class Gestionnaire {
   + toString() : String
@@ -39,9 +42,9 @@ abstract class Compte {
   # numeroCompte : String
   # solde : double
   # owner : Client
+  + setNumerpCompte(numeroCompte : String)
   + crediter(montant : double)
   + debiter(montant : double)
-  + getClassName() : String
   + toString() : String
 }
 
