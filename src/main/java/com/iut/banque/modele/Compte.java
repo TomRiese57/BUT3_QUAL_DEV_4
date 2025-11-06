@@ -121,7 +121,7 @@ public abstract class Compte {
 	 * Il est préférable d'utiliser une classe implémentant IDao pour créer un
 	 * objet au lieu d'appeler ce constructeur.
 	 */
-	public Compte(String numeroCompte, double solde, Client client) throws IllegalFormatException {
+	protected Compte(String numeroCompte, double solde, Client client) throws IllegalFormatException {
 		super();
 		this.setSolde(solde);
 		this.setNumeroCompte(numeroCompte);
@@ -136,7 +136,7 @@ public abstract class Compte {
 	 * Il est préférable d'utiliser une classe implémentant IDao pour créer un
 	 * objet au lieu d'appeler ce constructeur.
 	 */
-	public Compte() {
+	protected Compte() {
 		super();
 	}
 
@@ -197,6 +197,6 @@ public abstract class Compte {
 	 *         correct, false sinon
 	 */
 	public static boolean checkFormatNumeroCompte(String s) {
-		return Pattern.matches("[A-Z]{2}[0-9]{10}", s);
+		return Pattern.matches("[A-Z]{2}\\d{10}", s);
 	}
 }

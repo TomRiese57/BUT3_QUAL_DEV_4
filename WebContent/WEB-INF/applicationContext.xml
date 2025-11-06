@@ -33,7 +33,6 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
-				<!-- <prop key="hibernate.default_schema">allard19u_coa_banque</prop> -->
 			</props>
 		</property>
 		<property name="packagesToScan" value="com.iut.banque.modele" />

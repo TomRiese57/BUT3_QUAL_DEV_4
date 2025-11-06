@@ -29,7 +29,6 @@ public class DetailCompte extends ActionSupport {
 	 *         la factory
 	 */
 	public DetailCompte() {
-		System.out.println("In Constructor from DetailCompte class ");
 		ApplicationContext context = WebApplicationContextUtils
 				.getRequiredWebApplicationContext(ServletActionContext.getServletContext());
 		this.banque = (BanqueFacade) context.getBean("banqueFacade");

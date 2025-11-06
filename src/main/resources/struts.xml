@@ -30,7 +30,6 @@
 			<result name="ERROR">/JSP/{2}-error.jsp</result>
 			<result name="LISTCLIENTS">/JSP/ListClients.jsp</result>
 			<result>/JSP/{2}.jsp</result>
-			<!-- <result name="LOGIN">Login.jsp</result> -->
 			<result name="MULTI">Multiple.jsp</result>
 			<result name="FAILED">Failed.jsp</result>
 		</action>

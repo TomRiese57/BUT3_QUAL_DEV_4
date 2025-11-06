@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class PasswordHasher {
 
+    private PasswordHasher() {}
+
     public static String hashPassword(String password) {
         try {
             // Choisir l’algorithme de hash
@@ -23,7 +25,7 @@ public class PasswordHasher {
 
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Erreur: Algorithme SHA-256 non trouvé", e);
+            throw new IllegalStateException("Algorithme SHA-256 non disponible", e);
         }
     }
 
@@ -31,12 +33,6 @@ public class PasswordHasher {
     public static boolean verify(String password, String storedHash) {
         String hashedPassword = hashPassword(password);
         return hashedPassword.equals(storedHash);
-    }
-
-    public static void main(String[] args) {
-        String password = "WRONG PASS";
-        String storedHash = hashPassword(password);
-        System.out.println(storedHash);
     }
 }
 

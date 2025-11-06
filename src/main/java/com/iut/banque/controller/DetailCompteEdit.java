@@ -14,8 +14,6 @@ public class DetailCompteEdit extends DetailCompte {
 	 */
 	public DetailCompteEdit() {
 		super();
-		System.out.println("======================================");
-		System.out.println("Dans le constructeur DetailCompteEdit");
 	}
 
 	/**

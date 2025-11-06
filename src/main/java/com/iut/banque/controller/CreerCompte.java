@@ -78,7 +78,6 @@ public class CreerCompte extends ActionSupport {
 	 * Constructeur sans paramêtre de CreerCompte
 	 */
 	public CreerCompte() {
-		System.out.println("In Constructor from CreerCompte class ");
 		ApplicationContext context = WebApplicationContextUtils
 				.getRequiredWebApplicationContext(ServletActionContext.getServletContext());
 		this.banque = (BanqueFacade) context.getBean("banqueFacade");

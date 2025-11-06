@@ -3,7 +3,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-<!--  Définition variables de début 
 <s:set var="aDecouvertTag" value="aDecouvert" />
 <s:if test="%{#bool_val == true}">
     TRUE</s:if>
@@ -13,7 +12,7 @@
 
 
 
-<html>
+<html lang="fr" xml:lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Liste des comptes de la banque</title>
@@ -45,12 +44,12 @@
 		<s:iterator value="allClients">
 			<s:if test="(value.possedeComptesADecouvert() || !aDecouvert)">
 				<tr>
-					<td colspan="3"><b>Client :</b> <s:property
+					<th colspan="3"><b>Client :</b> <s:property
 							value="value.prenom" /> <s:property value="value.nom" /> (n°<s:property
-							value="value.numeroClient" />)</td>
+							value="value.numeroClient" />)</th>
 
 					<s:if test="(!aDecouvert)">
-						<td><s:url action="urlAddAccount" var="addAccount">
+						<th><s:url action="urlAddAccount" var="addAccount">
 								<s:param name="client">
 									<s:property value="value.userId" />
 								</s:param>
@@ -59,8 +58,8 @@
 									src="https://cdn4.iconfinder.com/data/icons/e-commerce-icon-set/48/More-128.png"
 									style="width: 20px; height: 20px" alt="Créer un compte"
 									title="Créer un compte pour ce client" />
-							</s:a></td>
-						<td><s:url action="deleteUser" var="deleteUser">
+							</s:a></th>
+						<th><s:url action="deleteUser" var="deleteUser">
 								<s:param name="client">
 									<s:property value="value.userId" />
 								</s:param>
@@ -70,7 +69,7 @@
 									style="width: 20px; height: 20px" alt="Supprimer ce client"
 									title="Supprimer ce client et tous ses comptes associés" />
 							</s:a>
-							</td>
+							</th>
 					</s:if>
 				</tr>
 				<s:iterator value="value.accounts">

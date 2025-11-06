@@ -26,7 +26,6 @@ public class BanqueManager {
 	 */
 	public BanqueManager() {
 		super();
-		// TODO injecter banque par Spring ?
 		bank = new Banque();
 	}
 
@@ -267,10 +266,8 @@ public class BanqueManager {
 			for (Map.Entry<String, Compte> entry : liste.entrySet()) {
 				this.deleteAccount(entry.getValue());
 			}
-		} else if (u instanceof Gestionnaire) {
-			if (bank.getGestionnaires().size() == 1) {
+		} else if (u instanceof Gestionnaire && bank.getGestionnaires().size() == 1) {
 				throw new IllegalOperationException("Impossible de supprimer le dernier gestionnaire de la banque");
-			}
 		}
 		this.bank.deleteUser(u.getUserId());
 		dao.deleteUser(u);

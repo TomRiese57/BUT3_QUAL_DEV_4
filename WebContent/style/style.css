@@ -14,17 +14,19 @@ table
 {
 	margin-right: auto;
 	margin-left: auto;
+    padding : 5px;
+    text-align: center;
+    border: 3px outset blue;
+}
+th
+{
+    border : 1px solid black;
+    text-align: center
 }
 td
 {
 	border : 1px solid black;
 	text-align: center
-}
-table
-{
-	padding : 5px;
-	text-align: center;
-	border: 3px outset blue;
 }
 table>thead
 {

@@ -27,7 +27,16 @@ public class CreerUtilisateur extends ActionSupport {
 	private String message;
 	private String result;
 
-	/**
+    private static final String SUCCESS_RESULT = "SUCCESS";
+    private static final String ERROR_RESULT = "ERROR";
+
+    private static final String MSG_SUCCESS = "Le nouvel utilisateur avec le user id '%s' a bien été crée.";
+    private static final String MSG_ID_DUPLICATE = "L'identifiant à déjà été assigné à un autre utilisateur de la banque.";
+    private static final String MSG_NUM_DUPLICATE = "Le numéro de client est déjà assigné à un autre client.";
+    private static final String MSG_ID_FORMAT = "Le format de l'identifiant est incorrect.";
+    private static final String MSG_NUM_FORMAT = "Format du numéro de client incorrect.";
+
+    /**
 	 * @return the userId
 	 */
 	public String getUserId() {
@@ -151,7 +160,6 @@ public class CreerUtilisateur extends ActionSupport {
 	 * Constructeur sans paramêtre de CreerUtilisateur
 	 */
 	public CreerUtilisateur() {
-		System.out.println("In Constructor from CreerUtilisateur class ");
 		ApplicationContext context = WebApplicationContextUtils
 				.getRequiredWebApplicationContext(ServletActionContext.getServletContext());
 		this.banque = (BanqueFacade) context.getBean("banqueFacade");
@@ -200,32 +208,32 @@ public class CreerUtilisateur extends ActionSupport {
 	 * 
 	 * @return String : le status de l'action
 	 */
-	public String creationUtilisateur() {
-		try {
-			if (client) {
-				banque.createClient(userId, userPwd, nom, prenom, adresse, male, numClient);
-			} else {
-				banque.createManager(userId, userPwd, nom, prenom, adresse, male);
-			}
-			this.message = "Le nouvel utilisateur avec le user id '" + userId + "' a bien été crée.";
-			this.result = "SUCCESS";
-			return "SUCCESS";
-		} catch (IllegalOperationException e) {
-			this.message = "L'identifiant à déjà été assigné à un autre utilisateur de la banque.";
-			this.result = "ERROR";
-			return "ERROR";
-		} catch (TechnicalException e) {
-			this.message = "Le numéro de client est déjà assigné à un autre client.";
-			this.result = "ERROR";
-			return "ERROR";
-		} catch (IllegalArgumentException e) {
-			this.message = "Le format de l'identifiant est incorrect.";
-			this.result = "ERROR";
-			return "ERROR";
-		} catch (IllegalFormatException e) {
-			this.message = "Format du numéro de client incorrect.";
-			this.result = "ERROR";
-			return "ERROR";
-		}
-	}
+    public String creationUtilisateur() {
+        try {
+            if (client) {
+                banque.createClient(userId, userPwd, nom, prenom, adresse, male, numClient);
+            } else {
+                banque.createManager(userId, userPwd, nom, prenom, adresse, male);
+            }
+            this.message = String.format(MSG_SUCCESS, userId);
+            this.result = SUCCESS_RESULT;
+            return SUCCESS_RESULT;
+        } catch (IllegalOperationException e) {
+            this.message = MSG_ID_DUPLICATE;
+            this.result = ERROR_RESULT;
+            return ERROR_RESULT;
+        } catch (TechnicalException e) {
+            this.message = MSG_NUM_DUPLICATE;
+            this.result = ERROR_RESULT;
+            return ERROR_RESULT;
+        } catch (IllegalArgumentException e) {
+            this.message = MSG_ID_FORMAT;
+            this.result = ERROR_RESULT;
+            return ERROR_RESULT;
+        } catch (IllegalFormatException e) {
+            this.message = MSG_NUM_FORMAT;
+            this.result = ERROR_RESULT;
+            return ERROR_RESULT;
+        }
+    }
 }
