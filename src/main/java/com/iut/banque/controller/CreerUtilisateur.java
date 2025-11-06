@@ -15,8 +15,8 @@ import com.iut.banque.cryptage.PasswordHasher;
 public class CreerUtilisateur extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
-	private BanqueFacade banque;
-	private String userId;
+    private transient BanqueFacade banque;
+    private String userId;
 	private String nom;
 	private String prenom;
 	private String adresse;

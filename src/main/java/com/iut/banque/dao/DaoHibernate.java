@@ -3,6 +3,7 @@ package com.iut.banque.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import com.iut.banque.cryptage.PasswordHasher;
 import org.hibernate.Session;
@@ -36,6 +37,7 @@ public class DaoHibernate implements IDao {
 	private SessionFactory sessionFactory;
 
 	public DaoHibernate() {
+        // rien à faire
 	}
 
 	/**
@@ -115,18 +117,18 @@ public class DaoHibernate implements IDao {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public Map<String, Compte> getAccountsByClientId(String id) {
-		Session session = sessionFactory.getCurrentSession();
-		Client client = session.get(Client.class, id);
-		if (client != null) {
-			return client.getAccounts();
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public Map<String, Compte> getAccountsByClientId(String id) {
+        Session session = sessionFactory.getCurrentSession();
+        Client client = session.get(Client.class, id);
+        if (client != null) {
+            return client.getAccounts();
+        } else {
+            return Collections.emptyMap();
+        }
+    }
 
-	/**
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -187,37 +189,32 @@ public class DaoHibernate implements IDao {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isUserAllowed(String userId, String userPwd) {
-		Session session = null;
-		if (userId == null || userPwd == null) {
-			return false;
-		} else {
-			session = sessionFactory.openSession();
-			userId = userId.trim();
-			if ("".equals(userId) || "".equals(userPwd)) {
-				return false;
-			} else {
-				session = sessionFactory.getCurrentSession();
-				Utilisateur user = session.get(Utilisateur.class, userId);
-				if (user == null) {
-					return false;
-				}
-				return (PasswordHasher.verify(userPwd, user.getUserPwd()));
-			}
-		}
-	}
+    public boolean isUserAllowed(String userId, String userPwd) {
+        if (userId == null || userPwd == null) {
+            return false;
+        }
 
-	/**
+        userId = userId.trim();
+        userPwd = userPwd.trim();
+        if (userId.isEmpty() || userPwd.isEmpty()) {
+            return false;
+        }
+
+        Session session = sessionFactory.getCurrentSession();
+        Utilisateur user = session.get(Utilisateur.class, userId);
+
+        return user != null && PasswordHasher.verify(userPwd, user.getUserPwd());
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public Utilisateur getUserById(String id) {
-		Session session = sessionFactory.getCurrentSession();
-		Utilisateur user = session.get(Utilisateur.class, id);
-		return user;
-	}
+    @Override
+    public Utilisateur getUserById(String id) {
+        return sessionFactory.getCurrentSession().get(Utilisateur.class, id);
+    }
 
-	/**
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -225,7 +222,7 @@ public class DaoHibernate implements IDao {
 		Session session = sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
 		List<Object> res = session.createCriteria(Client.class).list();
-		Map<String, Client> ret = new HashMap<String, Client>();
+		Map<String, Client> ret = new HashMap<>();
 		for (Object client : res) {
 			ret.put(((Client) client).getUserId(), (Client) client);
 		}
@@ -240,7 +237,7 @@ public class DaoHibernate implements IDao {
 		Session session = sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
 		List<Object> res = session.createCriteria(Gestionnaire.class).list();
-		Map<String, Gestionnaire> ret = new HashMap<String, Gestionnaire>();
+		Map<String, Gestionnaire> ret = new HashMap<>();
 		for (Object gestionnaire : res) {
 			ret.put(((Gestionnaire) gestionnaire).getUserId(), (Gestionnaire) gestionnaire);
 		}
@@ -252,6 +249,7 @@ public class DaoHibernate implements IDao {
 	 */
 	@Override
 	public void disconnect() {
+        // rien à faire
 	}
 
 }

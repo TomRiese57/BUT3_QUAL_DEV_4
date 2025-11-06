@@ -194,7 +194,7 @@ public class TestsDaoHibernate {
 	@Test
 	public void testGetAccountsByUserIdDoesntExist() {
 		Map<String, Compte> accounts = daoHibernate.getAccountsByClientId("c.doesntexit");
-		if (accounts != null) {
+		if (!accounts.isEmpty()) {
 			fail("Les comptes de cette utilisateur inexistant n'aurait pas du être renvoyés.");
 		}
 	}
@@ -202,7 +202,7 @@ public class TestsDaoHibernate {
 	@Test
 	public void testGetAccountsByUserIdNoAccount() {
 		Map<String, Compte> accounts = daoHibernate.getAccountsByClientId("c.exist");
-		if (accounts.size() != 0) {
+		if (!accounts.isEmpty()) {
 			fail("Ce client ne devrait pas avoir de compte.");
 		}
 	}

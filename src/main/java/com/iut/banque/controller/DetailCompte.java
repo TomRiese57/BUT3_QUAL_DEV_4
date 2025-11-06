@@ -15,12 +15,31 @@ import com.opensymphony.xwork2.ActionSupport;
 public class DetailCompte extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
-	protected BanqueFacade banque;
+	protected transient BanqueFacade banque;
 	private String montant;
 	private String error;
-	protected Compte compte;
+	protected transient Compte compte;
 
-	/**
+    private static final String SUCCESS_RESULT = "SUCCESS";
+    private static final String ERROR_RESULT = "ERROR";
+    private static final String NEGATIVE_AMOUNT = "NEGATIVEAMOUNT";
+    private static final String NOT_ENOUGH_FUNDS = "NOTENOUGHFUNDS";
+
+    // Codes d'erreur
+    private static final String ERROR_TECHNICAL = "TECHNICAL";
+    private static final String ERROR_BUSINESS = "BUSINESS";
+    private static final String ERROR_NEGATIVE_AMOUNT = "NEGATIVEAMOUNT";
+    private static final String ERROR_NEGATIVE_OVERDRAFT = "NEGATIVEOVERDRAFT";
+    private static final String ERROR_INCOMPATIBLE_OVERDRAFT = "INCOMPATIBLEOVERDRAFT";
+
+    // Messages correspondants
+    private static final String MSG_TECHNICAL = "Erreur interne. Verifiez votre saisie puis réessayer. Contactez votre conseiller si le problème persiste.";
+    private static final String MSG_BUSINESS = "Fonds insuffisants.";
+    private static final String MSG_NEGATIVE_AMOUNT = "Veuillez rentrer un montant positif.";
+    private static final String MSG_NEGATIVE_OVERDRAFT = "Veuillez rentrer un découvert positif.";
+    private static final String MSG_INCOMPATIBLE_OVERDRAFT = "Le nouveau découvert est incompatible avec le solde actuel.";
+
+    /**
 	 * Constructeur du controlleur DetailCompte
 	 * 
 	 * Récupère l'ApplicationContext
@@ -40,24 +59,25 @@ public class DetailCompte extends ActionSupport {
 	 * 
 	 * @return String, le string avec le détail du message d'erreur
 	 */
-	public String getError() {
-		switch (error) {
-		case "TECHNICAL":
-			return "Erreur interne. Verifiez votre saisie puis réessayer. Contactez votre conseiller si le problème persiste.";
-		case "BUSINESS":
-			return "Fonds insuffisants.";
-		case "NEGATIVEAMOUNT":
-			return "Veuillez rentrer un montant positif.";
-		case "NEGATIVEOVERDRAFT":
-			return "Veuillez rentrer un découvert positif.";
-		case "INCOMPATIBLEOVERDRAFT":
-			return "Le nouveau découvert est incompatible avec le solde actuel.";
-		default:
-			return "";
-		}
-	}
+    public String getError() {
+        switch (error) {
+            case ERROR_TECHNICAL:
+                return MSG_TECHNICAL;
+            case ERROR_BUSINESS:
+                return MSG_BUSINESS;
+            case ERROR_NEGATIVE_AMOUNT:
+                return MSG_NEGATIVE_AMOUNT;
+            case ERROR_NEGATIVE_OVERDRAFT:
+                return MSG_NEGATIVE_OVERDRAFT;
+            case ERROR_INCOMPATIBLE_OVERDRAFT:
+                return MSG_INCOMPATIBLE_OVERDRAFT;
+            default:
+                return "";
+        }
+    }
 
-	/**
+
+    /**
 	 * Permet de définir le champ error de la classe avec le string passé en
 	 * paramètre. Si jamais on passe un objet null, on adapte le string
 	 * automatiquement en "EMPTY"
@@ -103,12 +123,8 @@ public class DetailCompte extends ActionSupport {
 	 *         l'utilisateur
 	 */
 	public Compte getCompte() {
-		if (banque.getConnectedUser() instanceof Gestionnaire) {
+		if (banque.getConnectedUser() instanceof Gestionnaire && banque.getConnectedUser() instanceof Client && ((Client) banque.getConnectedUser()).getAccounts().containsKey(compte.getNumeroCompte())) {
 			return compte;
-		} else if (banque.getConnectedUser() instanceof Client) {
-			if (((Client) banque.getConnectedUser()).getAccounts().containsKey(compte.getNumeroCompte())) {
-				return compte;
-			}
 		}
 		return null;
 	}
@@ -123,22 +139,22 @@ public class DetailCompte extends ActionSupport {
 	 * @return String : Message correspondant à l'état du débit (si il a réussi
 	 *         ou pas)
 	 */
-	public String debit() {
-		Compte compte = getCompte();
-		try {
-			banque.debiter(compte, Double.parseDouble(montant.trim()));
-			return "SUCCESS";
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return "ERROR";
-		} catch (InsufficientFundsException ife) {
-			ife.printStackTrace();
-			return "NOTENOUGHFUNDS";
-		} catch (IllegalFormatException e) {
-			e.printStackTrace();
-			return "NEGATIVEAMOUNT";
-		}
-	}
+    public String debit() {
+        Compte compte1 = getCompte();
+        try {
+            banque.debiter(compte1, Double.parseDouble(montant.trim()));
+            return SUCCESS_RESULT;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return ERROR_RESULT;
+        } catch (InsufficientFundsException ife) {
+            ife.printStackTrace();
+            return NOT_ENOUGH_FUNDS;
+        } catch (IllegalFormatException e) {
+            e.printStackTrace();
+            return NEGATIVE_AMOUNT;
+        }
+    }
 
 	/**
 	 * Méthode crédit pour créditer le compte considéré en cours
@@ -146,17 +162,17 @@ public class DetailCompte extends ActionSupport {
 	 * @return String : Message correspondant à l'état du crédit (si il a réussi
 	 *         ou pas)
 	 */
-	public String credit() {
-		Compte compte = getCompte();
-		try {
-			banque.crediter(compte, Double.parseDouble(montant.trim()));
-			return "SUCCESS";
-		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
-			return "ERROR";
-		} catch (IllegalFormatException e) {
-			e.printStackTrace();
-			return "NEGATIVEAMOUNT";
-		}
-	}
+    public String credit() {
+        Compte compte2 = getCompte();
+        try {
+            banque.crediter(compte2, Double.parseDouble(montant.trim()));
+            return SUCCESS_RESULT;
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+            return ERROR_RESULT;
+        } catch (IllegalFormatException e) {
+            e.printStackTrace();
+            return NEGATIVE_AMOUNT;
+        }
+    }
 }

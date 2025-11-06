@@ -41,6 +41,7 @@ public class TestsCompteSansDecouvert {
 			compte.debiter(-100);
 			fail("La méthode n'a pas renvoyé d'exception!");
 		} catch (IllegalFormatException ife) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception e) {
 			fail("Exception de type " + e.getClass().getSimpleName()
 					+ " récupérée alors qu'un IllegalFormatException était attendu");
@@ -80,6 +81,7 @@ public class TestsCompteSansDecouvert {
 			compte.debiter(200);
 			fail("Il devrait avoir une InsufficientFundsException ici.");
 		} catch (InsufficientFundsException e) {
+            // Exception attendue, test réussi si levée
 		}
 	}
 

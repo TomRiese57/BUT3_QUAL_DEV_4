@@ -32,28 +32,12 @@ public class AccountConverter extends StrutsTypeConverter {
 	 */
 	private static IDao dao;
 
-	/**
-	 * Constructeur avec paramêtre pour le AccountConverter.
-	 * 
-	 * Utilisé pour l'injection de dépendance.
-	 * 
-	 * @param dao
-	 */
-	public AccountConverter(IDao dao) {
-		System.out.println("=========================");
-		System.out.println("Création du convertisseur de compte");
-		AccountConverter.dao = dao;
-		//System.out.println("DAO injectée : " + dao);
-	}
-
-	/**
-	 * 	Constructeur sans paramêtre pour le AccountConverter
-	 */
-	public AccountConverter() {
-		System.out.println("=========================");
-		System.out.println("Création du convertisseur de compte");
-		//System.out.println("DAO : " + dao);
-	}
+    /**
+     * Méthode utilisée pour injecter la DAO depuis Spring manuellement.
+     */
+    public static void setDao(IDao daoInstance) {
+        dao = daoInstance;
+    }
 
 	/**
 	 * Permet la conversion automatique par Struts d'un tableau de chaine vers
@@ -62,7 +46,7 @@ public class AccountConverter extends StrutsTypeConverter {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object convertFromString(Map context, String[] values, Class classe) {
-		Compte compte = (Compte) dao.getAccountById(values[0]);
+		Compte compte = dao.getAccountById(values[0]);
 		if (compte == null) {
 			throw new TypeConversionException("Impossible de convertir la chaine suivante : " + values[0]);
 		}

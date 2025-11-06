@@ -19,12 +19,12 @@ public class CreerCompte extends ActionSupport {
 	private String numeroCompte;
 	private boolean avecDecouvert;
 	private double decouvertAutorise;
-	private Client client;
+	private transient Client client;
 	private String message;
 	private boolean error;
 	private boolean result;
-	private BanqueFacade banque;
-	private Compte compte;
+	private transient BanqueFacade banque;
+	private transient Compte compte;
 
 	/**
 	 * @param compte
@@ -145,15 +145,17 @@ public class CreerCompte extends ActionSupport {
 	 */
 	public void setMessage(String message) {
 		switch (message) {
-		case "NONUNIQUEID":
-			this.message = "Ce numéro de compte existe déjà !";
-			break;
-		case "INVALIDFORMAT":
-			this.message = "Ce numéro de compte n'est pas dans un format valide !";
-			break;
-		case "SUCCESS":
-			this.message = "Le compte " + compte.getNumeroCompte() + " a bien été créé.";
-			break;
+            case "NONUNIQUEID":
+                this.message = "Ce numéro de compte existe déjà !";
+                break;
+            case "INVALIDFORMAT":
+                this.message = "Ce numéro de compte n'est pas dans un format valide !";
+                break;
+            case "SUCCESS":
+                this.message = "Le compte " + compte.getNumeroCompte() + " a bien été créé.";
+                break;
+            default:
+                break;
 		}
 	}
 
@@ -183,24 +185,22 @@ public class CreerCompte extends ActionSupport {
 	 * 
 	 * @return une chaine déterminant le résultat de l'action
 	 */
-	public String creationCompte() {
-		try {
-			if (avecDecouvert) {
-				try {
-					banque.createAccount(numeroCompte, client, decouvertAutorise);
-				} catch (IllegalOperationException e) {
-					e.printStackTrace();
-				}
-			} else {
-				banque.createAccount(numeroCompte, client);
-			}
-			this.compte = banque.getCompte(numeroCompte);
-			return "SUCCESS";
-		} catch (TechnicalException e) {
-			return "NONUNIQUEID";
-		} catch (IllegalFormatException e) {
-			return "INVALIDFORMAT";
-		}
-
-	}
+    public String creationCompte() {
+        try {
+            if (avecDecouvert) {
+                banque.createAccount(numeroCompte, client, decouvertAutorise);
+            } else {
+                banque.createAccount(numeroCompte, client);
+            }
+            this.compte = banque.getCompte(numeroCompte);
+            return "SUCCESS";
+        } catch (IllegalOperationException e) {
+            e.printStackTrace();
+            return "ERROR"; // ou un code spécifique si tu veux
+        } catch (TechnicalException e) {
+            return "NONUNIQUEID";
+        } catch (IllegalFormatException e) {
+            return "INVALIDFORMAT";
+        }
+    }
 }

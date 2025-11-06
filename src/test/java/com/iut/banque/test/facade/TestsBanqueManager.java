@@ -46,6 +46,7 @@ public class TestsBanqueManager {
 			bm.createClient("t.test1", "password", "test1nom", "test1prenom", "test town", true, "0101010101");
 			fail();
 		} catch (IllegalOperationException e) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception te) {
 			te.printStackTrace();
 			fail("Une Exception " + te.getClass().getSimpleName() + " a été récupérée");
@@ -72,6 +73,7 @@ public class TestsBanqueManager {
 			bm.deleteAccount(bm.getAccountById("CADNV00000"));
 			fail("Une IllegalOperationException aurait dû être récupérée");
 		} catch (IllegalOperationException e) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception te) {
 			fail("Une Exception " + te.getClass().getSimpleName() + " a été récupérée");
 		}
@@ -95,6 +97,7 @@ public class TestsBanqueManager {
 			bm.deleteAccount(bm.getAccountById("CSDNV00000"));
 			fail("Une IllegalOperationException aurait dû être récupérée");
 		} catch (IllegalOperationException e) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception te) {
 			fail("Une Exception " + te.getClass().getSimpleName() + " a été récupérée");
 		}
@@ -122,6 +125,7 @@ public class TestsBanqueManager {
 			bm.deleteUser(bm.getUserById("admin"));
 			fail("Une IllegalOperationException aurait dû être récupérée");
 		} catch (IllegalOperationException e) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception te) {
 			te.printStackTrace();
 			fail("Une Exception " + te.getClass().getSimpleName() + " a été récupérée");
@@ -151,6 +155,7 @@ public class TestsBanqueManager {
 			bm.deleteUser(bm.getUserById("j.doe1"));
 			fail("Une IllegalOperationException aurait dû être récupérée");
 		} catch (IllegalOperationException e) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception te) {
 			fail("Une Exception " + te.getClass().getSimpleName() + " a été récupérée");
 		}
@@ -162,6 +167,7 @@ public class TestsBanqueManager {
 			bm.deleteUser(bm.getUserById("j.doe1"));
 			fail("Une IllegalOperationException aurait dû être récupérée");
 		} catch (IllegalOperationException e) {
+            // Exception attendue, test réussi si levée
 		} catch (Exception te) {
 			fail("Une Exception " + te.getClass().getSimpleName() + " a été récupérée");
 		}
