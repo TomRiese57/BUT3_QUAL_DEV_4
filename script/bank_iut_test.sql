@@ -1,23 +1,34 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : 127.0.0.1:3306
+-- Généré le : ven. 07 nov. 2025 à 07:08
+-- Version du serveur : 9.1.0
+-- Version de PHP : 8.3.14
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `allard19u_coa_banque_essais`
+-- Base de données : `bank_iut_test`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Compte`
+-- Structure de la table `compte`
 --
 
-CREATE TABLE IF NOT EXISTS `Compte` (
+DROP TABLE IF EXISTS `compte`;
+CREATE TABLE IF NOT EXISTS `compte` (
   `numeroCompte` varchar(50) NOT NULL,
   `userId` varchar(50) NOT NULL,
   `solde` double NOT NULL,
@@ -28,10 +39,10 @@ CREATE TABLE IF NOT EXISTS `Compte` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `Compte`
+-- Déchargement des données de la table `compte`
 --
 
-INSERT INTO `Compte` (`numeroCompte`, `userId`, `solde`, `avecDecouvert`, `decouvertAutorise`) VALUES
+INSERT INTO `compte` (`numeroCompte`, `userId`, `solde`, `avecDecouvert`, `decouvertAutorise`) VALUES
 ('AB7328887341', 'j.doe2', 4242, 'AVEC', 123),
 ('AV1011011011', 'g.descomptes', 5, 'AVEC', 100),
 ('BD4242424242', 'j.doe1', 100, 'SANS', NULL),
@@ -52,10 +63,11 @@ INSERT INTO `Compte` (`numeroCompte`, `userId`, `solde`, `avecDecouvert`, `decou
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Utilisateur`
+-- Structure de la table `utilisateur`
 --
 
-CREATE TABLE IF NOT EXISTS `Utilisateur` (
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
   `userId` varchar(50) NOT NULL,
   `nom` varchar(45) NOT NULL,
   `prenom` varchar(45) NOT NULL,
@@ -69,10 +81,10 @@ CREATE TABLE IF NOT EXISTS `Utilisateur` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `Utilisateur`
+-- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `Utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `male`, `type`, `numClient`) VALUES
+INSERT INTO `utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `male`, `type`, `numClient`) VALUES
 ('a.lidell1', 'Lidell', 'Alice', '789, grande rue, Metz', '31f7a65e315586ac198bd798b6629ce4903d0899476d5741a9f32e2e521b6a66', b'1', 'CLIENT', '9865432100'),
 ('admin', 'Smith', 'Joe', '123, grande rue, Metz', '713bfda78870bf9d1b261f565286f85e97ee614efe5f0faf7c34e7ca4f65baca', b'1', 'MANAGER', ''),
 ('c.exist', 'TEST NOM', 'TEST PRENOM', 'TEST ADRESSE', '309fe82e71b868f0f3292e4d5bc92f936166afddf1d9f8676e32030e48b8b814', b'1', 'CLIENT', '0101010101'),
@@ -84,14 +96,15 @@ INSERT INTO `Utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `mal
 ('j.doe2', 'Doe', 'John', '457, grand boulevard, Perpignan', '31f7a65e315586ac198bd798b6629ce4903d0899476d5741a9f32e2e521b6a66', b'1', 'CLIENT', '0000000001');
 
 --
--- Constraints for dumped tables
+-- Contraintes pour les tables déchargées
 --
 
 --
--- Constraints for table `Compte`
+-- Contraintes pour la table `compte`
 --
-ALTER TABLE `Compte`
-  ADD CONSTRAINT `fk_Compte_userId` FOREIGN KEY (`userId`) REFERENCES `Utilisateur` (`userId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `compte`
+  ADD CONSTRAINT `fk_Compte_userId` FOREIGN KEY (`userId`) REFERENCES `utilisateur` (`userId`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
