@@ -148,7 +148,12 @@ public abstract class Compte {
 	 * @throws InsufficientFundsException
 	 *             : dans le cas où le montant est trop élevé
 	 */
-	public abstract void debiter(double montant) throws InsufficientFundsException, IllegalFormatException;
+	public void debiter(double montant) throws InsufficientFundsException, IllegalFormatException {
+        if (montant < 0) {
+            throw new IllegalFormatException("Le montant ne peux être négatif");
+        }
+        solde -= montant;
+    }
 
 	/**
 	 * Crédite sur le compte le montant passé en paramètre.

@@ -54,8 +54,14 @@
 		<input type="hidden" name="compte"
 			value="<s:property value='compte' />">
 		<s:submit value="Crediter" />
-		<s:submit value="Debiter" action="debitAction" />
 	</s:form>
+
+    <s:form name="formOperation" action="debitAction" method="post">
+        <s:textfield label="Montant" name="montant" />
+        <input type="hidden" name="compte"
+               value="<s:property value='compte' />">
+        <s:submit value="Debiter" />
+    </s:form>
 
 	<s:url action="urlDetail" var="urlDetail">
 		<s:param name="compte">
