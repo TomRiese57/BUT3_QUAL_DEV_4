@@ -71,12 +71,18 @@ public class Banque {
 	}
 
 	public void debiter(Compte compte, double montant) throws InsufficientFundsException, IllegalFormatException {
-		compte.debiter(montant);
+        if (compte == null) {
+            throw new IllegalArgumentException("Le compte ne peut pas être nul");
+        }
+        compte.debiter(montant);
 	}
 
-	public void crediter(Compte compte, double montant) throws IllegalFormatException {
-		compte.crediter(montant);
-	}
+    public void crediter(Compte compte, double montant) throws IllegalFormatException {
+        if (compte == null) {
+            throw new IllegalArgumentException("Le compte ne peut pas être nul");
+        }
+        compte.crediter(montant);
+    }
 
 	public void deleteUser(String userId) {
 		clients.remove(userId);

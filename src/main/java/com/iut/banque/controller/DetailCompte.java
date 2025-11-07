@@ -8,6 +8,7 @@ import com.iut.banque.exceptions.IllegalFormatException;
 import com.iut.banque.exceptions.InsufficientFundsException;
 import com.iut.banque.facade.BanqueFacade;
 import com.iut.banque.modele.Client;
+import com.iut.banque.modele.Utilisateur;
 import com.iut.banque.modele.Compte;
 import com.iut.banque.modele.Gestionnaire;
 import com.opensymphony.xwork2.ActionSupport;
@@ -122,14 +123,29 @@ public class DetailCompte extends ActionSupport {
 	 * @return Compte : l'objet compte après s'être assuré qu'il appartient à
 	 *         l'utilisateur
 	 */
-	public Compte getCompte() {
-		if (banque.getConnectedUser() instanceof Gestionnaire && banque.getConnectedUser() instanceof Client && ((Client) banque.getConnectedUser()).getAccounts().containsKey(compte.getNumeroCompte())) {
-			return compte;
-		}
-		return null;
-	}
+    public Compte getCompte() {
+        Utilisateur user = banque.getConnectedUser();
 
-	public void setCompte(Compte compte) {
+        if (user instanceof Client) {
+            Client client = (Client) user;
+            // On vérifie que le compte appartient bien au client
+            if (client.getAccounts().containsKey(compte.getNumeroCompte())) {
+                return compte;
+            } else {
+                return null; // le client n'a pas ce compte
+            }
+        }
+        else if (user instanceof Gestionnaire) {
+            // Le gestionnaire peut voir tous les comptes
+            return compte;
+        }
+
+        return null; // aucun utilisateur connecté
+    }
+
+
+
+    public void setCompte(Compte compte) {
 		this.compte = compte;
 	}
 
