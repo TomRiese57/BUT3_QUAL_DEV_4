@@ -83,14 +83,15 @@
 	<!-- ============= Converter ============= -->
 
 	<!-- Injection de la Dao dans le ClientConverter par le constructeur -->
-	<bean id="clientConverter"
-		class="com.iut.banque.converter.ClientConverter" scope="singleton">
-		<constructor-arg ref="daoHibernate" />
-	</bean>
+    <bean id="clientConverter"
+          class="com.iut.banque.converter.ClientConverter" scope="singleton">
+        <property name="dao" ref="daoHibernate"/>
+    </bean>
+
 
 	<!-- Injection de la Dao dans le AccountConverter par le constructeur -->
 	<bean id="accountConverter"
 		class="com.iut.banque.converter.AccountConverter" scope="singleton">
-		<constructor-arg ref="daoHibernate" />
-	</bean>
+        <property name="dao" ref="daoHibernate"/>
+    </bean>
 </beans>
