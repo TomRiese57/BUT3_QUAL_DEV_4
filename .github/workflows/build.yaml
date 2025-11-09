@@ -87,10 +87,7 @@ jobs:
           DB_URL_TEST: jdbc:mysql://mysql:3306/bank_iut_test
           DB_USER: root
           DB_PASS: root
-        run: mvn -B clean verify \
-          -Dspring.datasource.url=$DB_URL_TEST \
-          -Dspring.datasource.username=$DB_USER \
-          -Dspring.datasource.password=$DB_PASS
+        run: mvn -B clean verify -Dspring.datasource.url=jdbc:mysql://127.0.0.1:3306/bank_iut_test -Dspring.datasource.username=root -Dspring.datasource.password=root
 
       # Analyse SonarCloud
       - name: SonarCloud Scan
