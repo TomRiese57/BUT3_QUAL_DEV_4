@@ -98,6 +98,13 @@ jobs:
           mvn -B clean verify -e
           echo "✅ Build completed successfully"
 
+      - name: Debug - Show test results
+        if: failure()
+        run: |
+          echo "=== Test failures ==="
+          find . -name "*.txt" -path "*/surefire-reports/*" -exec cat {} \;
+          find . -name "*.txt" -path "*/failsafe-reports/*" -exec cat {} \;
+
       # Analyse SonarCloud
       - name: SonarCloud Scan
         env:
