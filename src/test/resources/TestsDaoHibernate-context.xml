@@ -33,18 +33,19 @@
 		<property name="packagesToScan" value="com.iut.banque.modele" />
 	</bean>
 
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+    </bean>
+
 	<!-- La source de donnée utilisée pour les tests. Contient les infos de 
 		base de la connection -->
     <bean id="dataSource" scope="singleton"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url"
-                  value="#{systemEnvironment['DB_URL'] ?: 'jdbc:mysql://localhost:3306/bank_iut_test'}" />
-        <property name="username"
-                  value="#{systemEnvironment['DB_USER'] ?: 'root'}" />
-        <property name="password"
-                  value="#{systemEnvironment['DB_PASS'] ?: ''}" />
-        <!-- Nécessaire, sinon les test se font quand même -->
+        <property name="url" value="${DB_URL_TEST:jdbc:mysql://localhost:3306/bank_iut_test}" />
+        <property name="username" value="${DB_USER:root}" />
+        <property name="password" value="${DB_PASS:}" />
         <property name="defaultAutoCommit" value="false" />
     </bean>
 

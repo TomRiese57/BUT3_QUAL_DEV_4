@@ -1,5 +1,11 @@
 name: Build and Analyze with SonarCloud
 
+env:
+  DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test
+  DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod
+  DB_USER: root
+  DB_PASS: root
+
 on:
   push:
     branches:
@@ -74,7 +80,7 @@ jobs:
           DB_URL: jdbc:mysql://127.0.0.1:3306/bank_iut_test
           DB_USER: root
           DB_PASS: root
-        run: mvn -B clean verify -Dspring.datasource.url=$DB_URL -Dspring.datasource.username=$DB_USER -Dspring.datasource.password=$DB_PASS
+        run: mvn -B clean verify -Dspring.datasource.url=$DB_URL_TEST -Dspring.datasource.username=$DB_USER -Dspring.datasource.password=$DB_PASS
 
       # Analyse SonarCloud
       - name: SonarCloud Scan
