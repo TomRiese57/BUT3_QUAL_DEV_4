@@ -177,6 +177,9 @@ public abstract class Utilisateur {
 	 */
 	protected Utilisateur(String nom, String prenom, String adresse, boolean male, String userId, String userPwd) {
 		super();
+        if (userPwd == null || userPwd.trim().isEmpty()) {
+            throw new IllegalArgumentException("Le mot de passe ne peut pas être null ou vide");
+        }
 		this.nom = nom;
 		this.prenom = prenom;
 		this.adresse = adresse;

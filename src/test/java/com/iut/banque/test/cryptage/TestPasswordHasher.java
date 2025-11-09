@@ -1,13 +1,10 @@
 package com.iut.banque.test.cryptage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.iut.banque.cryptage.PasswordHasher;
+
+import static org.junit.Assert.*;
 
 public class TestPasswordHasher {
 
@@ -22,8 +19,9 @@ public class TestPasswordHasher {
 
     @Test
     public void testHashPasswordNotNull() {
-        // Vérifie que le hash n'est pas nul
-        assertTrue(hash != null && !hash.isEmpty());
+        // Vérifie que le hash n'est pas nul ni vide
+        assertNotNull(hash);
+        assertFalse(hash.isEmpty());
     }
 
     @Test
@@ -46,7 +44,7 @@ public class TestPasswordHasher {
 
     @Test
     public void testVerifyWithNullInputs() {
-        // vérifie qu'un mot de mot de passe null ne fonctionne pas
+        // Vérifie qu'une comparaison avec null ou vide échoue proprement (false)
         assertFalse(PasswordHasher.verify(null, hash));
         assertFalse(PasswordHasher.verify(password, null));
         assertFalse(PasswordHasher.verify("", hash));
@@ -54,15 +52,11 @@ public class TestPasswordHasher {
 
     @Test(expected = IllegalArgumentException.class)
     public void testHashPasswordEmptyString() {
-        // vérifie que hasher un mot de passe vide renvoie un exeption
         PasswordHasher.hashPassword("");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testHashPasswordNullString() {
-        // Vérifie que le hash renvoi une exeption sur un mot de passe null
         PasswordHasher.hashPassword(null);
     }
-
-
 }

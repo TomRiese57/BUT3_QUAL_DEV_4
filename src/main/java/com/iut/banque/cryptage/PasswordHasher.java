@@ -8,14 +8,14 @@ public class PasswordHasher {
     private PasswordHasher() {}
 
     public static String hashPassword(String password) {
-        try {
-            // Choisir l’algorithme de hash
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Le mot de passe ne peut pas être null ou vide");
+        }
 
-            // Appliquer le hash
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] encodedHash = digest.digest(password.getBytes());
 
-            // Convertir en hexadécimal lisible
             StringBuilder hexString = new StringBuilder();
             for (byte b : encodedHash) {
                 String hex = Integer.toHexString(0xff & b);
@@ -29,10 +29,10 @@ public class PasswordHasher {
         }
     }
 
-    // Vérifie si un mot de passe correspond à un hash existant
     public static boolean verify(String password, String storedHash) {
-        String hashedPassword = hashPassword(password);
-        return hashedPassword.equals(storedHash);
+        if (password == null || password.isEmpty() || storedHash == null || storedHash.isEmpty()) {
+            return false;
+        }
+        return hashPassword(password).equals(storedHash);
     }
 }
-
