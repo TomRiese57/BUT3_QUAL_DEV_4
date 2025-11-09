@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # 🧩 Démarrage d'un service MySQL pour les tests
+    # Démarrage d'un service MySQL pour les tests
     services:
       mysql:
         image: mysql:8.0
@@ -51,35 +51,32 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # ⏱️ Attente du démarrage complet de MySQL
+      # Attente du démarrage complet de MySQL
       - name: Wait for MySQL to be ready
         run: |
           for i in {1..20}; do
             if mysqladmin ping -h"127.0.0.1" --silent; then
-              echo "✅ MySQL is up!"
+              echo "MySQL is up!"
               break
             fi
             echo "Waiting for MySQL..."
             sleep 3
           done
 
-      # 📂 Import du script SQL de test
+      # Import du script SQL de test
       - name: Initialize test database
         run: |
           mysql -h 127.0.0.1 -u root -proot bank_iut_test < script/bank_iut_test.sql
 
-      # 🧱 Compilation et tests avec Maven
+      # Compilation et tests avec Maven
       - name: Build with Maven
         env:
           DB_URL: jdbc:mysql://127.0.0.1:3306/bank_iut_test
           DB_USER: root
           DB_PASS: root
-        run: mvn -B clean verify \
-          -Dspring.datasource.url=$DB_URL \
-          -Dspring.datasource.username=$DB_USER \
-          -Dspring.datasource.password=$DB_PASS
+        run: mvn -B clean verify -Dspring.datasource.url=$DB_URL -Dspring.datasource.username=$DB_USER -Dspring.datasource.password=$DB_PASS
 
-      # 🔍 Analyse SonarCloud
+      # Analyse SonarCloud
       - name: SonarCloud Scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
