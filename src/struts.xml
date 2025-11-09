@@ -58,6 +58,18 @@
 			<result>/JSP/Login.jsp</result>
 		</action>
 
+        <!-- Changement de mot de passe -->
+        <action name="changePasswordPage" class="com.iut.banque.controller.ChangePasswordAction" method="showPage">
+            <result name="success">/JSP/ChangePassword.jsp</result>
+            <result name="error">/JSP/Connect.jsp</result>
+        </action>
+
+        <action name="changePassword" class="com.iut.banque.controller.ChangePasswordAction" method="execute">
+            <result name="success">/JSP/ChangePassword.jsp</result>
+            <result name="input">/JSP/ChangePassword.jsp</result>
+            <result name="error">/JSP/ChangePassword.jsp</result>
+        </action>
+
 		<!-- Appel de la page compte avec un paramètre donné -->
 
 		<action name="urlDetail" class="com.iut.banque.controller.DetailCompte">

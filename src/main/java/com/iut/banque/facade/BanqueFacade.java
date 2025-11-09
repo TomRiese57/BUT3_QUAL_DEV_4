@@ -275,4 +275,17 @@ public class BanqueFacade {
 			banqueManager.changeDecouvert(compte, nouveauDecouvert);
 		}
 	}
+
+    /**
+     * Méthode pour mettre à jour un utilisateur dans la base de données
+     *
+     * @param utilisateur
+     *            Utilisateur correspondant à l'objet Utilisateur à mettre à jour
+     * @throws TechnicalException
+     *             si l'utilisateur est null ou si l'utilisateur n'est pas un
+     *             utilisateur persistant.
+     */
+    public void updateUser(Utilisateur utilisateur) throws TechnicalException {
+        banqueManager.updateUser(utilisateur);
+    }
 }
