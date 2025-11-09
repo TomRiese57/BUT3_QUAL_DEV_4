@@ -1,8 +1,8 @@
 name: Build and Analyze with SonarCloud
 
 env:
-  DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test
-  DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod
+  DB_URL_TEST: jdbc:mysql://mysql:3306/bank_iut_test
+  DB_URL_PROD: jdbc:mysql://mysql:3306/bank_iut_prod
   DB_USER: root
   DB_PASS: root
 
@@ -17,7 +17,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Démarrage d'un service MySQL pour les tests
     services:
       mysql:
         image: mysql:8.0
@@ -36,7 +35,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important pour SonarCloud
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -61,26 +60,31 @@ jobs:
       - name: Wait for MySQL to be ready
         run: |
           for i in {1..20}; do
-            if mysqladmin ping -h"127.0.0.1" --silent; then
+            if mysqladmin ping -h"mysql" --silent; then
               echo "MySQL is up!"
               break
             fi
             echo "Waiting for MySQL..."
             sleep 3
           done
+          # petit délai pour s'assurer que la DB est bien prête
+          sleep 10
 
       # Import du script SQL de test
       - name: Initialize test database
         run: |
-          mysql -h 127.0.0.1 -u root -proot bank_iut_test < script/bank_iut_test.sql
+          mysql -h mysql -u root -proot bank_iut_test < script/bank_iut_test.sql
 
       # Compilation et tests avec Maven
       - name: Build with Maven
         env:
-          DB_URL: jdbc:mysql://127.0.0.1:3306/bank_iut_test
+          DB_URL_TEST: jdbc:mysql://mysql:3306/bank_iut_test
           DB_USER: root
           DB_PASS: root
-        run: mvn -B clean verify -Dspring.datasource.url=$DB_URL_TEST -Dspring.datasource.username=$DB_USER -Dspring.datasource.password=$DB_PASS
+        run: mvn -B clean verify \
+          -Dspring.datasource.url=$DB_URL_TEST \
+          -Dspring.datasource.username=$DB_USER \
+          -Dspring.datasource.password=$DB_PASS
 
       # Analyse SonarCloud
       - name: SonarCloud Scan
