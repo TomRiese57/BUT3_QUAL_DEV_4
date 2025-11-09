@@ -73,7 +73,13 @@ jobs:
       # Import du script SQL de test
       - name: Initialize test database
         run: |
-          mysql -h mysql -u root -proot bank_iut_test < script/bank_iut_test.sql
+          # Attendre que MySQL accepte les connexions
+          until mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SELECT 1"; do
+            echo "Waiting for MySQL..."
+            sleep 3
+          done
+          # Import du script SQL
+          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test < script/bank_iut_test.sql
 
       # Compilation et tests avec Maven
       - name: Build with Maven
