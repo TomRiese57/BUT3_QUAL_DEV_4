@@ -40,15 +40,16 @@
 
 	<!-- La source de donnée utilisée en production. Contient les infos de base
 		de la connection -->
-	<bean id="dataSource" scope="singleton"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName"
-			value="com.mysql.jdbc.Driver" />
-
-		<property name="url" value="jdbc:mysql://localhost:3306/bank_iut_prod?useSSL=false" />
-			<property name="username" value="root" />
-			<property name="password"  value="" />
-	</bean>
+    <bean id="dataSource" scope="singleton"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url"
+                  value="#{systemEnvironment['DB_URL'] ?: 'jdbc:mysql://localhost:3306/bank_iut_prod?useSSL=false'}" />
+        <property name="username"
+                  value="#{systemEnvironment['DB_USER'] ?: 'root'}" />
+        <property name="password"
+                  value="#{systemEnvironment['DB_PASS'] ?: ''}" />
+    </bean>
 
 	<!-- ============= Gestion des Transactions ============= -->
 
