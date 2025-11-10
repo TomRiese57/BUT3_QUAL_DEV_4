@@ -9,27 +9,7 @@
     <name>_00_ASBank2023</name>
 
     <properties>
-        <!-- Versions -->
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- SonarCloud -->
-        <sonar.projectKey>BUT3_QUAL_DEV_4</sonar.projectKey>
-        <sonar.organization>tomr57</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-
-        <!-- Chemins JaCoCo -->
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            ${project.build.directory}/site/jacoco/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
-
-        <!-- Exclusions (optionnel) -->
-        <sonar.exclusions>
-            **/generated/**,
-            **/target/**
-        </sonar.exclusions>
     </properties>
 
     <build>
@@ -114,17 +94,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <!-- Plugin Surefire pour les tests unitaires -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <forkCount>1</forkCount>
-                    <reuseForks>true</reuseForks>
-                </configuration>
             </plugin>
         </plugins>
 

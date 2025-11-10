@@ -50,6 +50,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      # Attente explicite de MySQL (même si le health-check devrait suffire)
       - name: Wait for MySQL to be ready
         run: |
           echo "Waiting for MySQL service to be ready..."
@@ -65,6 +66,7 @@ jobs:
           echo "❌ MySQL failed to start in time"
           exit 1
 
+      # Vérification et création des bases de données
       - name: Setup databases
         run: |
           echo "Creating databases..."
@@ -74,35 +76,27 @@ jobs:
           SHOW DATABASES;
           EOF
 
+      # Import du script SQL de test
       - name: Initialize test database
         run: |
           echo "Importing test data..."
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test < script/bank_iut_test.sql
           echo "✅ Test database initialized"
+          
+          # Vérification que les tables sont bien créées
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test -e "SHOW TABLES;"
 
-      - name: Build and Test with Coverage
+      # Compilation et tests avec Maven
+      - name: Build with Maven
         env:
           DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           DB_USER: root
           DB_PASS: root
         run: |
-          echo "Running Maven build with tests and coverage..."
+          echo "Running Maven build..."
           mvn -B clean verify -e
-          echo "✅ Build and tests completed"
-
-      - name: Check JaCoCo Report
-        run: |
-          echo "Checking for JaCoCo report..."
-          if [ -f "target/site/jacoco/jacoco.xml" ]; then
-            echo "✅ JaCoCo report found!"
-            ls -lh target/site/jacoco/
-          else
-            echo "❌ JaCoCo report NOT found!"
-            echo "Listing target directory:"
-            find target -name "*.xml" -o -name "jacoco*"
-          fi
+          echo "✅ Build completed successfully"
 
       - name: Debug - Show test results
         if: failure()
@@ -121,16 +115,4 @@ jobs:
           mvn -B sonar:sonar \
             -Dsonar.projectKey=BUT3_QUAL_DEV_4 \
             -Dsonar.organization=tomr57 \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-          echo "✅ SonarCloud analysis completed"
-
-      # Upload du rapport de couverture comme artifact
-      - name: Upload coverage reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-reports
-          path: |
-            target/site/jacoco/
-            target/surefire-reports/
+            -Dsonar.host.url=https://sonarcloud.io
