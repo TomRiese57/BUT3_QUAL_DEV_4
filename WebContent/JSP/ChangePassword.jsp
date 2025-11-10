@@ -34,6 +34,13 @@
 
 <s:form name="changePasswordForm" action="changePassword" method="POST">
     <table>
+        <thead>
+        <tr>
+            <th>Champ</th>
+            <th>Valeur</th>
+        </tr>
+        </thead>
+        <tbody>
         <tr>
             <td><label for="oldPassword">Ancien mot de passe :</label></td>
             <td><s:password name="oldPassword" id="oldPassword" required="true" /></td>
@@ -47,10 +54,11 @@
             <td><s:password name="confirmPassword" id="confirmPassword" required="true" /></td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" style="text-align: center;">
                 <s:submit value="Modifier le mot de passe" />
             </td>
         </tr>
+        </tbody>
     </table>
 </s:form>
 </body>

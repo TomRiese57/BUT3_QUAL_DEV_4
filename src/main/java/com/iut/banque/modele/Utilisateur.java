@@ -143,6 +143,9 @@ public abstract class Utilisateur {
 	 * @throws IllegalFormatException
 	 */
 	public void setUserId(String userId) throws IllegalFormatException {
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalFormatException("L'identifiant ne peut pas être vide");
+        }
 		this.userId = userId;
 	}
 

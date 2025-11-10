@@ -39,7 +39,7 @@ public class TestMotDePasseUtilisateur {
     public void testMethodeSetUserPwdPasswordIsHashed() {
         String mdp = "motdepasse123!";
         c.setUserPwd(mdp);
-        assertFalse("Le mot de passe stocké ne doit pas être en clair", mdp.equals(c.getUserPwd()));
+        assertNotEquals(mdp, c.getUserPwd());
     }
 
     /**

@@ -52,6 +52,7 @@ public class ChangePasswordAction extends ActionSupport {
     /**
      * Traite la modification du mot de passe
      */
+    @Override
     public String execute() {
         logger.info("execute() appelée - Modification du mot de passe");
 
