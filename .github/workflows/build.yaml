@@ -90,7 +90,7 @@ jobs:
       - name: Build with Maven
         env:
           DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           DB_USER: root
           DB_PASS: root
         run: |
