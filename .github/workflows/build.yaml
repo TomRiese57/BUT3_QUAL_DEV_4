@@ -95,8 +95,12 @@ jobs:
           DB_PASS: root
         run: |
           echo "Running Maven build..."
-          mvn -B clean verify -e
+          mvn -B clean verify \
+            -Dspring.datasource.url=$DB_URL_TEST \
+            -Dspring.datasource.username=$DB_USER \
+            -Dspring.datasource.password=$DB_PASS
           echo "✅ Build completed successfully"
+
 
       - name: Debug - Show test results
         if: failure()
