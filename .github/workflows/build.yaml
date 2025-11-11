@@ -90,13 +90,13 @@ jobs:
       - name: Build with Maven
         env:
           DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           DB_USER: root
           DB_PASS: root
         run: |
           echo "Running Maven build..."
           mvn -B clean verify \
-            -DDB_URL_PROD=$DB_URL_PROD \
+            -DDB_URL_TEST=$DB_URL_TEST \
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS
           echo "✅ Build completed successfully"
