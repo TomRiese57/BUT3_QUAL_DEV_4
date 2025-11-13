@@ -1,90 +1,128 @@
-body
-{
-	font-family : 'Segoe UI', Arial, sans-serif;
-	text-align : center;
-}
-h1
-{
-	text-align : center;
-	border : 5px outset blue;
-	margin-left: 20px;
-	margin-right: 20px;
-}
-table
-{
-	margin-right: auto;
-	margin-left: auto;
-    padding : 5px;
+/* ====== STYLE GLOBAL ====== */
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    margin: 0;
+    padding: 0;
     text-align: center;
-    border: 3px outset blue;
 }
-th
-{
-    border : 1px solid black;
-    text-align: center
+
+/* ====== TITRE PRINCIPAL ====== */
+h1 {
+    background: linear-gradient(135deg, #004e92, #000428);
+    color: white;
+    padding: 20px;
+    margin: 0 0 30px 0;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
-td
-{
-	border : 1px solid black;
-	text-align: center
+
+/* ====== TABLEAU ====== */
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 90%;
+    max-width: 1000px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
-table>thead
-{
-	background-color: rgb(0,255,255);
+
+th, td {
+    text-align: center;
+    padding: 12px 15px;
 }
-table>thead>tr>td
-{
-	padding: 5px;
-	border: 5px double blue;
-	font-weight: bold;
-	font-size: 150%;
+
+thead {
+    background: #004e92;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
 }
-table>tbody>tr>td
-{
-	padding:5px;
-	border: 1px solid blue;
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background 0.2s ease;
 }
-.success
-{
-	background-color: rgb(0,255,0);
+
+tbody tr:hover {
+    background: #f0f7ff;
 }
-.failure
-{
-	background-color:red;
-	color:white;
+
+/* ====== ÉTAT DES SOLDES ====== */
+.soldeNegatif {
+    font-weight: bold;
+    color: #d90429;
 }
-.soldeNegatif
-{
-	font-weight: bold;
-	color: red;
-}
-footer
-{
-	margin-top: 10px;
-	font-style: italic;
-	border: 1px solid black;
-	box-shadow: 3px 3px 5px #888888;
-}
-.btnLogout
-{
-	position:absolute;
-	top : 90px;
-	left : 30px;
-}
+
+/* ====== MESSAGES ====== */
 .errors {
-    background-color: #ffcccc;
-    border: 1px solid #ff0000;
-    color: #cc0000;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
+    background-color: #ffe5e5;
+    border-left: 5px solid #e63946;
+    color: #7a0000;
+    padding: 12px;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(230, 57, 70, 0.2);
 }
 
 .messages {
-    background-color: #ccffcc;
-    border: 1px solid #00cc00;
-    color: #006600;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
+    background-color: #e5ffe5;
+    border-left: 5px solid #2a9d8f;
+    color: #064e3b;
+    padding: 12px;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(42, 157, 143, 0.2);
+}
+
+/* ====== FOOTER ====== */
+footer {
+    margin-top: 30px;
+    padding: 15px;
+    background: #eaeaea;
+    font-style: italic;
+    border-top: 1px solid #ccc;
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ====== BOUTONS ====== */
+.btnLogout {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+input[type="submit"] {
+    background: #004e92;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+
+input[type="submit"]:hover {
+    background: #0073e6;
+    transform: scale(1.05);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        font-size: 14px;
+    }
+    th, td {
+        padding: 8px;
+    }
+    h1 {
+        font-size: 1.5em;
+        padding: 15px;
+    }
 }
