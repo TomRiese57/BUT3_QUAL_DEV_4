@@ -1,7 +1,5 @@
 package com.iut.banque.controller;
 
-import java.util.logging.Logger;
-
 import org.apache.struts2.ServletActionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -19,33 +17,28 @@ public class ChangePasswordAction extends ActionSupport {
     private String newPassword;
     private String confirmPassword;
     private transient BanqueFacade banque;
-    private transient Logger logger = Logger.getLogger(getClass().getName());
 
     /**
-     * Constructeur de la classe ChangePasswordAction
+     * Constructeur
      */
     public ChangePasswordAction() {
-        logger.info("In Constructor from ChangePasswordAction class");
         ApplicationContext context = WebApplicationContextUtils
                 .getRequiredWebApplicationContext(ServletActionContext.getServletContext());
         this.banque = (BanqueFacade) context.getBean("banqueFacade");
     }
 
     /**
-     * Affiche la page de changement de mot de passe
+     * Affiche la page de changement du mot de passe
      */
     public String showPage() {
-        logger.info("showPage() appelée");
 
         Utilisateur connectedUser = banque.getConnectedUser();
 
         if (connectedUser == null) {
-            logger.warning("Utilisateur non connecté");
             addActionError("Vous devez être connecté pour accéder à cette page.");
             return ERROR;
         }
 
-        logger.info("Utilisateur trouvé: " + connectedUser.getUserId());
         return SUCCESS;
     }
 
@@ -54,91 +47,88 @@ public class ChangePasswordAction extends ActionSupport {
      */
     @Override
     public String execute() {
-        logger.info("execute() appelée - Modification du mot de passe");
 
         Utilisateur connectedUser = banque.getConnectedUser();
 
         if (connectedUser == null) {
-            logger.warning("Utilisateur non connecté");
             addActionError("Vous devez être connecté pour modifier votre mot de passe.");
             return ERROR;
         }
 
         // Validation des champs
-        if (oldPassword == null || oldPassword.trim().isEmpty()) {
+        if (isEmpty(oldPassword)) {
             addActionError("L'ancien mot de passe est obligatoire.");
             return INPUT;
         }
 
-        if (newPassword == null || newPassword.trim().isEmpty()) {
+        if (isEmpty(newPassword)) {
             addActionError("Le nouveau mot de passe est obligatoire.");
             return INPUT;
         }
 
-        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
+        if (isEmpty(confirmPassword)) {
             addActionError("La confirmation du mot de passe est obligatoire.");
             return INPUT;
         }
 
-        // Vérification que les nouveaux mots de passe correspondent
+        // Vérification correspondance
         if (!newPassword.equals(confirmPassword)) {
             addActionError("Les nouveaux mots de passe ne correspondent pas.");
             return INPUT;
         }
 
-        // Vérification de l'ancien mot de passe
+        // Vérification ancien mot de passe
         if (!PasswordHasher.verify(oldPassword, connectedUser.getUserPwd())) {
             addActionError("L'ancien mot de passe est incorrect.");
             return INPUT;
         }
 
-        // Vérification que le nouveau mot de passe est différent de l'ancien
+        // Vérification nouveau différent de l'ancien
         if (oldPassword.equals(newPassword)) {
             addActionError("Le nouveau mot de passe doit être différent de l'ancien.");
             return INPUT;
         }
 
-        // Vérification de la longueur du nouveau mot de passe
+        // Longueur minimale
         if (newPassword.length() < 6) {
             addActionError("Le nouveau mot de passe doit contenir au moins 6 caractères.");
             return INPUT;
         }
 
         try {
-            // Modification du mot de passe
-            // Note: setUserPwd() hache automatiquement le mot de passe
+            // Mise à jour du mot de passe
             connectedUser.setUserPwd(newPassword);
-
-            // Mise à jour dans la base de données
             banque.updateUser(connectedUser);
-
-            logger.info("Mot de passe modifié avec succès pour l'utilisateur: " + connectedUser.getUserId());
 
             addActionMessage("Votre mot de passe a été modifié avec succès.");
 
-            // Réinitialisation des champs pour sécurité
-            this.oldPassword = null;
-            this.newPassword = null;
-            this.confirmPassword = null;
+            // Nettoyage des champs
+            oldPassword = null;
+            newPassword = null;
+            confirmPassword = null;
 
             return SUCCESS;
 
         } catch (Exception e) {
-            logger.severe("Erreur lors de la modification du mot de passe: " + e.getMessage());
-            e.printStackTrace();
-            addActionError("Une erreur s'est produite lors de la modification du mot de passe : " + e.getMessage());
+            // Pas de printStackTrace() → conforme Sonar
+            addActionError("Une erreur est survenue lors de la modification du mot de passe.");
             return ERROR;
         }
     }
 
     /**
-     * Getter de l'utilisateur connecté (utilisé pour afficher les infos dans la JSP)
+     * Getter utilisateur connecté
      */
     public Utilisateur getConnectedUser() {
         return banque.getConnectedUser();
     }
 
-    // Getters et Setters pour les champs du formulaire
+    // Helper
+    private boolean isEmpty(String s) {
+        return s == null || s.trim().isEmpty();
+    }
+
+    // Getters & Setters
     public String getOldPassword() {
         return oldPassword;
     }
