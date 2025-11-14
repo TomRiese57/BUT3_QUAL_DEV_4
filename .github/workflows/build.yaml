@@ -110,13 +110,18 @@ jobs:
           find . -name "*.txt" -path "*/failsafe-reports/*" -exec cat {} \;
 
       # Analyse SonarCloud
-      - name: SonarCloud Scan
+      - name: Build and analyze with SonarCloud
         env:
+          DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          DB_USER: root
+          DB_PASS: root
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          echo "Running SonarCloud analysis..."
-          mvn -B verify sonar:sonar \
+          mvn -B clean verify sonar:sonar \
+            -DDB_URL_TEST=$DB_URL_TEST \
+            -DDB_USER=$DB_USER \
+            -DDB_PASS=$DB_PASS \
             -Dsonar.projectKey=BUT3_QUAL_DEV_4 \
             -Dsonar.organization=tomr57 \
             -Dsonar.host.url=https://sonarcloud.io \
