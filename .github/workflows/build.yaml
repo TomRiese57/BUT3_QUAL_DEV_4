@@ -109,7 +109,7 @@ jobs:
           find . -name "*.txt" -path "*/surefire-reports/*" -exec cat {} \;
           find . -name "*.txt" -path "*/failsafe-reports/*" -exec cat {} \;
 
-      # Analyse SonarCloud
+      # Analyse SonarClouds
       - name: Build and analyze with SonarCloud
         env:
           DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
