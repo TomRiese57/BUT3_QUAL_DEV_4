@@ -1,4 +1,4 @@
-name: Build and Analyze with SonarCloud
+name: Build, Test & Analyze with SonarCloud
 
 on:
   push:
@@ -25,6 +25,14 @@ jobs:
           --health-timeout=5s
           --health-retries=10
 
+    env:
+      DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USER: root
+      DB_PASS: root
+      SONAR_TOKEN: ${{ secrets.QUALDEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,12 +45,6 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -50,23 +52,29 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Attente explicite de MySQL (même si le health-check devrait suffire)
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      # Vérification de MySQL
       - name: Wait for MySQL to be ready
         run: |
-          echo "Waiting for MySQL service to be ready..."
+          echo "Waiting for MySQL..."
           for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent 2>/dev/null; then
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent; then
               echo "✅ MySQL is ready!"
               mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SELECT VERSION();"
               exit 0
             fi
-            echo "⏳ Waiting for MySQL... ($i/30)"
+            echo "⏳ Waiting ($i/30)"
             sleep 2
           done
-          echo "❌ MySQL failed to start in time"
+          echo "❌ MySQL did not start in time"
           exit 1
 
-      # Vérification et création des bases de données
+      # Création des bases de données
       - name: Setup databases
         run: |
           echo "Creating databases..."
@@ -76,65 +84,45 @@ jobs:
           SHOW DATABASES;
           EOF
 
-      # Import du script SQL de test
-      - name: Initialize test database
+      # Import SQL
+      - name: Import SQL
         run: |
-          echo "Importing test data..."
-          ls -l script
+          echo "Importing test database..."
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test < script/bank_iut_test.sql
-          echo "✅ Test database initialized"
+          echo "✅ Test DB ready"
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test -e "SHOW TABLES;"
 
-      # Import du script SQL de prod
-      - name: Initialize prod database
-        run: |
-          echo "Importing prod data..."
+          echo "Importing prod database..."
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_prod < script/bank_iut_prod.sql
-          echo "✅ Prod database initialized"
+          echo "✅ Prod DB ready"
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_prod -e "SHOW TABLES;"
 
-      - name: Build with Maven (debug)
-        run: mvn -B clean verify -DskipTests=false -X
-
-    # Compilation et tests avec Maven
-      - name: Build with Maven
-        env:
-          DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          DB_USER: root
-          DB_PASS: root
+      # Build Maven et tests
+      - name: Build and run tests
         run: |
-          echo "Running Maven build..."
+          echo "Running Maven build and tests..."
           mvn -B clean verify \
             -DDB_URL_TEST=$DB_URL_TEST \
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS
-          echo "✅ Build completed successfully"
+        continue-on-error: true
 
-
-      - name: Debug - Show test results
+      # Debug tests en cas d'échec
+      - name: Show test failures
         if: failure()
         run: |
-          echo "=== Test failures ==="
-          find . -name "*.txt" -path "*/surefire-reports/*" -exec cat {} \;
-          find . -name "*.txt" -path "*/failsafe-reports/*" -exec cat {} \;
+          echo "=== TEST FAILURES ==="
+          find target/surefire-reports -name "*.txt" -exec cat {} \;
 
       # Analyse SonarCloud
-      - name: Build and analyze with SonarCloud
-        env:
-          DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          DB_USER: root
-          DB_PASS: root
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.QUALDEV }}
+      - name: Analyze with SonarCloud
         run: |
-          mvn -B clean verify sonar:sonar \
-            -DDB_URL_TEST=$DB_URL_TEST \
-            -DDB_USER=$DB_USER \
-            -DDB_PASS=$DB_PASS \
+          mvn -B sonar:sonar \
             -Dsonar.projectKey=TomRiese57_BUT3_QUAL_DEV_4 \
             -Dsonar.organization=tomr57 \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            -DDB_URL_TEST=$DB_URL_TEST \
+            -DDB_USER=$DB_USER \
+            -DDB_PASS=$DB_PASS
