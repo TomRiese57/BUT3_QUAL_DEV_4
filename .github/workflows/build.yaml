@@ -11,25 +11,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: bank_iut_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost -u root -proot --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
     env:
-      DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      DB_URL_PROD: jdbc:mysql://127.0.0.1:3306/bank_iut_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      DB_USER: root
-      DB_PASS: root
+      DB_URL_TEST: ${{ secrets.DB_URL_TEST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASS: ${{ secrets.DB_PASS }}
       SONAR_TOKEN: ${{ secrets.QUALDEV }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -57,45 +42,6 @@ jobs:
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
-
-      # Vérification de MySQL
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "Waiting for MySQL..."
-          for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent; then
-              echo "✅ MySQL is ready!"
-              mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SELECT VERSION();"
-              exit 0
-            fi
-            echo "⏳ Waiting ($i/30)"
-            sleep 2
-          done
-          echo "❌ MySQL did not start in time"
-          exit 1
-
-      # Création des bases de données
-      - name: Setup databases
-        run: |
-          echo "Creating databases..."
-          mysql -h 127.0.0.1 -P 3306 -u root -proot <<EOF
-          CREATE DATABASE IF NOT EXISTS bank_iut_test;
-          CREATE DATABASE IF NOT EXISTS bank_iut_prod;
-          SHOW DATABASES;
-          EOF
-
-      # Import SQL
-      - name: Import SQL
-        run: |
-          echo "Importing test database..."
-          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test < script/bank_iut_test.sql
-          echo "✅ Test DB ready"
-          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test -e "SHOW TABLES;"
-
-          echo "Importing prod database..."
-          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_prod < script/bank_iut_prod.sql
-          echo "✅ Prod DB ready"
-          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_prod -e "SHOW TABLES;"
 
       # Build Maven et tests
       - name: Build and run tests
