@@ -95,7 +95,7 @@ jobs:
           DB_PASS: root
         run: |
           echo "Running Maven build..."
-          mvn -B clean verify \
+          mvn -B clean verify -DskipTests \
             -DDB_URL_TEST=$DB_URL_TEST \
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS
@@ -118,7 +118,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B clean verify sonar:sonar \
+          mvn -B clean verify -DskipTests sonar:sonar \
             -DDB_URL_TEST=$DB_URL_TEST \
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS \

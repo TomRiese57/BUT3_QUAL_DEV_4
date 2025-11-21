@@ -1,7 +1,11 @@
-# Étape 1 : Build du projet avec Maven
-FROM eclipse-temurin:17-jdk AS build
+# Étape de build
+ARG TARGETARCH
+FROM eclipse-temurin:17-jdk-jammy AS build
 
-RUN apt-get update && apt-get install -y maven
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y maven \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -11,16 +15,13 @@ RUN mvn -B dependency:resolve
 COPY src ./src
 COPY WebContent ./WebContent
 
-RUN mvn clean package -DskipTests
+RUN mvn -U clean package -DskipTests
 
-# Étape 2 : Déployer dans Tomcat
-FROM tomcat:9-jdk17
+# Étape finale avec Tomcat
+ARG TARGETARCH
+FROM tomcat:9.0-jdk11-temurin-jammy
 
-WORKDIR /usr/local/tomcat/webapps/
-
-# Copier le .war généré et le renommer ROOT.war pour qu'il soit accessible à /
-COPY --from=build /app/target/*.war ./ROOT.war
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
-
 CMD ["catalina.sh", "run"]
