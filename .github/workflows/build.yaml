@@ -92,9 +92,11 @@ jobs:
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_prod < script/bank_iut_prod.sql
           echo "✅ Prod database initialized"
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_prod -e "SHOW TABLES;"
-          
 
-        # Compilation et tests avec Maven
+      - name: Build with Maven (debug)
+        run: mvn -B clean verify -DskipTests=false -X
+
+    # Compilation et tests avec Maven
       - name: Build with Maven
         env:
           DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
