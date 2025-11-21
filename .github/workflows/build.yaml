@@ -116,7 +116,7 @@ jobs:
           DB_USER: root
           DB_PASS: root
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ TOKENQUALDEV }}
+          SONAR_TOKEN: ${{ secrets.TOKENQUALDEV }}
         run: |
           mvn -B clean verify -DskipTests sonar:sonar \
             -DDB_URL_TEST=$DB_URL_TEST \
