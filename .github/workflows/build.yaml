@@ -52,13 +52,6 @@ jobs:
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS
 
-      # Debug tests en cas d'échec
-      - name: Show test failures
-        if: failure()
-        run: |
-          echo "=== TEST FAILURES ==="
-          find target/surefire-reports -name "*.txt" -exec cat {} \;
-
       # Analyse SonarCloud
       - name: Analyze with SonarCloud
         run: |
