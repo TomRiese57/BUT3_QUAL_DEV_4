@@ -48,10 +48,9 @@
     <bean id="dataSource" scope="singleton"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url"
-                  value="${DB_URL_PROD:jdbc:mysql://localhost:3306/bank_iut_prod?useSSL=false}" />
-        <property name="username" value="${DB_USER:root}" />
-        <property name="password" value="${DB_PASS:}" />
+        <property name="url" value="mysql://localhost:3306/bank_iut_prod?useSSL=false" />
+        <property name="username" value="root" />
+        <property name="password" value="" />
         <property name="defaultAutoCommit" value="false" />
     </bean>
 
