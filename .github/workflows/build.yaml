@@ -123,6 +123,7 @@ jobs:
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS \
             -Dsonar.projectKey=tomr57 \
+            -Dsonar.organization=tomr57:com.iut.banque:_00_ASBank2023 \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
