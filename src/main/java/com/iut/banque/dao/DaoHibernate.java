@@ -202,7 +202,6 @@ public class DaoHibernate implements IDao {
 
         Session session = sessionFactory.getCurrentSession();
         Utilisateur user = session.get(Utilisateur.class, userId);
-
         return user != null && PasswordHasher.verify(userPwd, user.getUserPwd());
     }
 

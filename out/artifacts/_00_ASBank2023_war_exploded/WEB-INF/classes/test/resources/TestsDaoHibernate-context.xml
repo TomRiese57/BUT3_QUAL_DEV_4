@@ -34,16 +34,14 @@
 
 	<!-- La source de donnée utilisée pour les tests. Contient les infos de 
 		base de la connection -->
-	<bean id="dataSource" scope="singleton"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url"
-			value="jdbc:mysql://localhost:3309/bank_iut_test" />
-		<property name="username" value="root" />
-		<property name="password" value="" />
-		<!-- Nécessaire, sinon les test se font quand même -->
-		<property name="defaultAutoCommit" value="false" />
-	</bean>
+    <bean id="dataSource" scope="singleton"
+          class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="${DB_URL_TEST:jdbc:mysql://localhost:3306/bank_iut_test}" />
+        <property name="username" value="${DB_USER:root}" />
+        <property name="password" value="${DB_PASS:}" />
+        <property name="defaultAutoCommit" value="false" />
+    </bean>
 	
 	<!-- ============= Gestion des transactions ============= -->
 
