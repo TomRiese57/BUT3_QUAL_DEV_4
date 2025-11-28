@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `compte` (
   `avecDecouvert` varchar(5) NOT NULL,
   `decouvertAutorise` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`numeroCompte`),
-  KEY `index_userClient` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  INDEX `index_userClient` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `compte`
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `numClient` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `numClient_UNIQUE` (`numClient`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `utilisateur`
