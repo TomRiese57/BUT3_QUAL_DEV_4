@@ -11,10 +11,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          # Crée automatiquement la BDD "bank_iut_test" au démarrage
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: bank_iut_test
+        ports:
+          # Mappe le port 3306 du conteneur au port 3306 du runner (pour 127.0.0.1)
+          - 3306:3306
+        # GitHub Actions attendra que cette commande réussisse avant de démarrer les étapes
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -proot --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     env:
-      DB_URL_TEST: ${{ secrets.DB_URL_TEST }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USER: root
+      DB_PASS: root
       SONAR_TOKEN: ${{ secrets.QUALDEV }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,6 +60,15 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
 
+
+      # Import du schéma SQL (nécessaire)
+      - name: Import SQL schema
+        run: |
+          echo "Importing test database..."
+          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test < script/bank_iut_test.sql
+          echo "✅ Test DB ready"
+          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test -e "SHOW TABLES;"
+
       # Build Maven et tests
       - name: Build and run tests
         run: |
@@ -52,6 +78,13 @@ jobs:
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS
 
+      # Debug tests en cas d'échec
+      - name: Show test failures (if any)
+        if: failure()
+        run: |
+          echo "=== TEST FAILURES ==="
+          find target/surefire-reports -name "*.txt" -exec cat {} \;
+
       # Analyse SonarCloud
       - name: Analyze with SonarCloud
         run: |
@@ -60,7 +93,4 @@ jobs:
             -Dsonar.organization=tomr57 \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-            -DDB_URL_TEST=$DB_URL_TEST \
-            -DDB_USER=$DB_USER \
-            -DDB_PASS=$DB_PASS
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
