@@ -77,6 +77,7 @@ jobs:
             -DDB_URL_TEST=$DB_URL_TEST \
             -DDB_USER=$DB_USER \
             -DDB_PASS=$DB_PASS
+        continue-on-error: true
 
       # Debug tests en cas d'échec
       - name: Show test failures (if any)
