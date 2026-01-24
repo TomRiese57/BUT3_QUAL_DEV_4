@@ -27,8 +27,8 @@ SET time_zone = "+00:00";
 -- Structure de la table `compte`
 --
 
-DROP TABLE IF EXISTS `compte`;
-CREATE TABLE IF NOT EXISTS `compte` (
+DROP TABLE IF EXISTS `Compte`;
+CREATE TABLE IF NOT EXISTS `Compte` (
   `numeroCompte` varchar(50) NOT NULL,
   `userId` varchar(50) NOT NULL,
   `solde` double NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `compte` (
 -- Déchargement des données de la table `compte`
 --
 
-INSERT INTO `compte` (`numeroCompte`, `userId`, `solde`, `avecDecouvert`, `decouvertAutorise`) VALUES
+INSERT INTO `Compte` (`numeroCompte`, `userId`, `solde`, `avecDecouvert`, `decouvertAutorise`) VALUES
 ('AB7328887341', 'j.doe2', 4242, 'AVEC', 123),
 ('AV1011011011', 'g.descomptes', 5, 'AVEC', 100),
 ('BD4242424242', 'j.doe1', 100, 'SANS', NULL),
@@ -66,8 +66,8 @@ INSERT INTO `compte` (`numeroCompte`, `userId`, `solde`, `avecDecouvert`, `decou
 -- Structure de la table `utilisateur`
 --
 
-DROP TABLE IF EXISTS `utilisateur`;
-CREATE TABLE IF NOT EXISTS `utilisateur` (
+DROP TABLE IF EXISTS `Utilisateur`;
+CREATE TABLE IF NOT EXISTS `Utilisateur` (
   `userId` varchar(50) NOT NULL,
   `nom` varchar(45) NOT NULL,
   `prenom` varchar(45) NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `male`, `type`, `numClient`) VALUES
+INSERT INTO `Utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `male`, `type`, `numClient`) VALUES
 ('a.lidell1', 'Lidell', 'Alice', '789, grande rue, Metz', '31f7a65e315586ac198bd798b6629ce4903d0899476d5741a9f32e2e521b6a66', 1, 'CLIENT', '9865432100'),
 ('admin', 'Smith', 'Joe', '123, grande rue, Metz', '713bfda78870bf9d1b261f565286f85e97ee614efe5f0faf7c34e7ca4f65baca', 1, 'MANAGER', ''),
 ('c.exist', 'TEST NOM', 'TEST PRENOM', 'TEST ADRESSE', '309fe82e71b868f0f3292e4d5bc92f936166afddf1d9f8676e32030e48b8b814', 1, 'CLIENT', '0101010101'),
@@ -102,7 +102,7 @@ INSERT INTO `utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `mal
 --
 -- Contraintes pour la table `compte`
 --
-ALTER TABLE `compte`
+ALTER TABLE `Compte`
   ADD CONSTRAINT `fk_Compte_userId` FOREIGN KEY (`userId`) REFERENCES `utilisateur` (`userId`);
 COMMIT;
 
