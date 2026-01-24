@@ -9,19 +9,18 @@ on:
 
 jobs:
   build:
+    name: Build and Analyze
     runs-on: ubuntu-latest
 
+    # Service MySQL pour les tests d'intégration
     services:
       mysql:
         image: mysql:8.0
         env:
-          # Crée automatiquement la BDD "bank_iut_test" au démarrage
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: bank_iut_test
         ports:
-          # Mappe le port 3306 du conteneur au port 3306 du runner (pour 127.0.0.1)
           - 3306:3306
-        # GitHub Actions attendra que cette commande réussisse avant de démarrer les étapes
         options: >-
           --health-cmd="mysqladmin ping -h localhost -u root -proot --silent"
           --health-interval=10s
@@ -29,6 +28,7 @@ jobs:
           --health-retries=10
 
     env:
+      # URL adaptée pour l'environnement CI (127.0.0.1 pointe vers le service mysql mappé)
       DB_URL_TEST: jdbc:mysql://127.0.0.1:3306/bank_iut_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       DB_USER: root
       DB_PASS: root
@@ -39,59 +39,52 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Important pour une analyse SonarCloud précise
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: temurin
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          distribution: 'temurin'
+          cache: 'maven'
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-
-      # Import du schéma SQL (nécessaire)
+      # Initialisation de la BDD de test
       - name: Import SQL schema
         run: |
-          echo "Importing test database..."
+          echo "Waiting for MySQL to be ready..."
+          # Le service 'options' attend déjà, mais on assure l'import
           mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test < script/bank_iut_test.sql
-          echo "✅ Test DB ready"
-          mysql -h 127.0.0.1 -P 3306 -u root -proot bank_iut_test -e "SHOW TABLES;"
+          echo "✅ Database imported successfully"
 
-      # Build Maven et tests
+      # Compilation et Tests (avec vos arguments pom.xml add-opens inclus automatiquement)
       - name: Build and run tests
         run: |
-          echo "Running Maven build and tests..."
           mvn -B clean verify \
-            -DDB_URL_TEST=$DB_URL_TEST \
-            -DDB_USER=$DB_USER \
-            -DDB_PASS=$DB_PASS
-        continue-on-error: true
+            -DDB_URL_TEST="$DB_URL_TEST" \
+            -DDB_USER="$DB_USER" \
+            -DDB_PASS="$DB_PASS"
 
-      # Debug tests en cas d'échec
-      - name: Show test failures (if any)
+      # Affichage des erreurs si les tests échouent
+      - name: Show test failures (on error)
         if: failure()
         run: |
-          echo "=== TEST FAILURES ==="
+          echo "=== SUREFIRE REPORTS ==="
           find target/surefire-reports -name "*.txt" -exec cat {} \;
 
-      # Analyse SonarCloud
+      # Analyse SonarCloud (ne s'exécute que si les tests passent)
       - name: Analyze with SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.QUALDEV }}
         run: |
           mvn -B sonar:sonar \
             -Dsonar.projectKey=TomRiese57_BUT3_QUAL_DEV_4 \
             -Dsonar.organization=tomr57 \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
