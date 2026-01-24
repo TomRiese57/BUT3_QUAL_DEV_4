@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iut.banque.exceptions.IllegalOperationException;
 import com.iut.banque.facade.BanqueManager;
 
-//@RunWith indique à JUnit de prendre le class runner de Spirng
+//@RunWith indique à JUnit de prendre le class runner de Spring
 @RunWith(SpringJUnit4ClassRunner.class)
 // @ContextConfiguration permet de charger le context utilisé pendant les tests.
 // Par défault (si aucun argument n'est précisé), cherche le fichier
 /// src/com/iut/banque/test/TestsDaoHibernate-context.xml
-@ContextConfiguration("/test/resources/TestsBanqueManager-context.xml")
+@ContextConfiguration("classpath:TestsBanqueManager-context.xml")
 @Transactional("transactionManager")
 public class TestsBanqueManager {
 
