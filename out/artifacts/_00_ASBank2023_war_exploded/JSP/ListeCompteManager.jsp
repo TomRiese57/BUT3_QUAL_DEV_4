@@ -4,13 +4,6 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
 <s:set var="aDecouvertTag" value="aDecouvert" />
-<s:if test="%{#bool_val == true}">
-    TRUE</s:if>
-<s:else>
-    FALSE</s:else>-->
-
-
-
 
 <html lang="fr" xml:lang="fr">
 <head>
