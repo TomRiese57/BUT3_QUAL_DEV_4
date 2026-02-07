@@ -29,7 +29,7 @@ public class TestsBanqueManager {
 	public void TestCreationDunClient() {
 		try {
 			bm.loadAllClients();
-			bm.createClient("t.test1", "password", "test1nom", "test1prenom", "test town", true, "4242424242");
+			bm.createClient("t.test1", "password", "test1nom", "test1prenom", "test town", true, "424242424");
 		} catch (IllegalOperationException e) {
 			e.printStackTrace();
 			fail("IllegalOperationException récupérée : " + e.getStackTrace());
