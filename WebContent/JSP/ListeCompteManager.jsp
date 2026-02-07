@@ -42,16 +42,6 @@
 							value="value.numeroClient" />)</th>
 
 					<s:if test="(!aDecouvert)">
-						<th><s:url action="urlAddAccount" var="addAccount">
-								<s:param name="client">
-									<s:property value="value.userId" />
-								</s:param>
-							</s:url> <s:a href="%{addAccount}">
-								<img
-									src="https://cdn4.iconfinder.com/data/icons/e-commerce-icon-set/48/More-128.png"
-									style="width: 20px; height: 20px" alt="Créer un compte"
-									title="Créer un compte pour ce client" />
-							</s:a></th>
 						<th><s:url action="deleteUser" var="deleteUser">
 								<s:param name="client">
 									<s:property value="value.userId" />
@@ -62,7 +52,7 @@
 									style="width: 20px; height: 20px" alt="Supprimer ce client"
 									title="Supprimer ce client et tous ses comptes associés" />
 							</s:a>
-							</th>
+                        </th>
 					</s:if>
 				</tr>
 				<s:iterator value="value.accounts">

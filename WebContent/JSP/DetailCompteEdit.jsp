@@ -54,7 +54,6 @@
 		<input type="hidden" name="compte"
 			value="<s:property value='compte.numeroCompte' />">
 		<s:submit value="Crediter" />
-		<s:submit value="Debiter" action="debitActionEdit" />
 	</s:form>
 
 	<s:form name="formOperation" action="debitActionEdit" method="post">
