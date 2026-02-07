@@ -26,11 +26,11 @@ public class TestsClientNumeroFormat {
     @Parameterized.Parameters(name = "{index}: checkFormatNumeroClient({0}) = {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"1234567890", true},
+                {"123456789", true},
                 {"12a456789", false},
                 {"12#456789", false},
                 {"12345678", false},
-                {"12345678901", false}
+                {"1234567890", false}
         });
     }
 
