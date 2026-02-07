@@ -114,6 +114,24 @@ public class DaoHibernate implements IDao {
 		session.delete(c);
 	}
 
+    @Override
+    public void reloadUser(String userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Utilisateur user = session.get(Utilisateur.class, userId);
+        if (user != null) {
+            // Rafraîchir l'objet depuis la base de données
+            session.refresh(user);
+
+            // Si c'est un client, rafraîchir aussi ses comptes
+            if (user instanceof Client) {
+                Client client = (Client) user;
+                for (Compte compte : client.getAccounts().values()) {
+                    session.refresh(compte);
+                }
+            }
+        }
+    }
+
 	/**
 	 * {@inheritDoc}
 	 */

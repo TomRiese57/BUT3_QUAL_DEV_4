@@ -99,6 +99,18 @@ public class BanqueFacade {
 		return banqueManager.getAllClients();
 	}
 
+    /**
+     * Recharge les données d'un client depuis la base de données
+     * @param userId L'identifiant du client à recharger
+     */
+    public void reloadClient(String userId) {
+        if (loginManager.getConnectedUser() instanceof Client) {
+            banqueManager.reloadClient(userId);
+            // Mettre à jour l'utilisateur en session
+            loginManager.setCurrentUser(banqueManager.getUserById(userId));
+        }
+    }
+
 	/**
 	 * Méthode pour déconnecter l'utilisateur.
 	 */

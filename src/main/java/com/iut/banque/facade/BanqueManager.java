@@ -75,6 +75,14 @@ public class BanqueManager {
 		dao.updateAccount(compte);
 	}
 
+    /**
+     * Force le rechargement d'un client depuis la base de données
+     * @param userId L'identifiant du client
+     */
+    public void reloadClient(String userId) {
+        dao.reloadUser(userId);
+    }
+
 	/**
 	 * Méthode pour créditer un compte en faisant appel à la méthode créditer de
 	 * l'objet bank pour mettre à jour localement, et ensuite appeler la méthode

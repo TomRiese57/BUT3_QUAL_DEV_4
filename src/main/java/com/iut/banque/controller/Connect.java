@@ -134,9 +134,12 @@ public class Connect extends ActionSupport {
 	 * @return Map<String, Compte> correspondant à l'ID du compte et l'objet
 	 *         Compte associé
 	 */
-	public Map<String, Compte> getAccounts() {
-		return ((Client) banque.getConnectedUser()).getAccounts();
-	}
+    public Map<String, Compte> getAccounts() {
+        Client client = (Client) banque.getConnectedUser();
+        // Recharger le client depuis la BDD pour avoir les données à jour
+        banque.reloadClient(client.getUserId());
+        return ((Client) banque.getConnectedUser()).getAccounts();
+    }
 
 	public String logout() {
         logger.info("Logging out");

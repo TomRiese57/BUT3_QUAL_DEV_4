@@ -96,6 +96,12 @@ public interface IDao {
 	 */
 	Compte getAccountById(String id);
 
+    /**
+     * Recharge un utilisateur depuis la base de données en effaçant le cache
+     * @param userId L'identifiant de l'utilisateur
+     */
+    void reloadUser(String userId);
+
 	/**
 	 * Méthode pour créer un utilisateur (Client ou Gestionnaire)
 	 * 
