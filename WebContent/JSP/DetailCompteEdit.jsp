@@ -57,6 +57,13 @@
 		<s:submit value="Debiter" action="debitActionEdit" />
 	</s:form>
 
+	<s:form name="formOperation" action="debitActionEdit" method="post">
+    		<s:textfield label="Montant" name="montant" />
+    		<input type="hidden" name="compte"
+    			value="<s:property value='compte.numeroCompte' />">
+    		<s:submit value="Debiter"/>
+    </s:form>
+
 	<s:if test="%{compte.className == \"CompteAvecDecouvert\"}">
 		<s:form name="formChangeDecouvertAutorise"
 			action="changerDecouvertAutoriseAction" method="post">
