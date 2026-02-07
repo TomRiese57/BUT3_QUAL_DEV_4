@@ -13,7 +13,7 @@ public class TestMotDePasseUtilisateur {
 
     @Before
     public void setUp() throws Exception {
-        c = new Client("John", "Doe", "20 rue Bouvier", true, "j.doe1", "password", "1234567890");
+        c = new Client("John", "Doe", "20 rue Bouvier", true, "j.doe1", "password", "123456789");
     }
 
     /**

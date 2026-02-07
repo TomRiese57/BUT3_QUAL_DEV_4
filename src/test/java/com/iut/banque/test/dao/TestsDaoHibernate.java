@@ -211,7 +211,7 @@ public class TestsDaoHibernate {
 	public void testCreateUser() {
 		try {
 			try {
-				daoHibernate.createUser("NOM", "PRENOM", "ADRESSE", true, "c.new1", "PASS", false, "5544554455");
+				daoHibernate.createUser("NOM", "PRENOM", "ADRESSE", true, "c.new1", "PASS", false, "554455445");
 			} catch (IllegalFormatException e) {
 				fail("Il ne devrait pas y avoir d'exception ici");
 			}
@@ -267,7 +267,7 @@ public class TestsDaoHibernate {
 	public void testCreateClient() {
 		try {
 			try {
-				daoHibernate.createUser("NOM", "PRENOM", "ADRESSE", true, "c.new1", "PASS", false, "9898989898");
+				daoHibernate.createUser("NOM", "PRENOM", "ADRESSE", true, "c.new1", "PASS", false, "989898989");
 			} catch (IllegalArgumentException | IllegalFormatException e) {
 				fail("Il ne devrait pas y avoir d'exception ici");
 				e.printStackTrace();
@@ -276,7 +276,7 @@ public class TestsDaoHibernate {
 			if (!(client instanceof Client)) {
 				fail("Cet utilisateur devrait être un client.");
 			}
-			assertEquals("9898989898", ((Client) client).getNumeroClient());
+			assertEquals("989898989", ((Client) client).getNumeroClient());
 		} catch (TechnicalException e) {
 			fail("Il ne devrait pas y avoir d'exception ici.");
 		}
