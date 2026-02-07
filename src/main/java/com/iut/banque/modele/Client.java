@@ -49,7 +49,7 @@ public class Client extends Utilisateur {
 	 * @throws IllegalFormatException
 	 */
     @Override
-	public void setUserId(String userId) throws IllegalFormatException {
+	public void setUserId(String userId) {
 		if (!Client.checkFormatUserIdClient(userId)) {
 			throw new IllegalFormatException("L'identifiant n'est pas au bon format.");
 		}
