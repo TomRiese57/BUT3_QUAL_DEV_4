@@ -90,7 +90,7 @@
 <body>
     <div class="index-container">
         <div class="index-card">
-            <h1>Bienvenue sur l'application IUT Bank 2023</h1>
+            <h1>Bienvenue sur l'application IUT Bank 2026</h1>
             <p class="subtitle">Plateforme de gestion bancaire sécurisée</p>
             
             <div class="logo-container">
