@@ -51,7 +51,7 @@ public class Client extends Utilisateur {
     @Override
 	public void setUserId(String userId) throws IllegalFormatException {
 		if (!Client.checkFormatUserIdClient(userId)) {
-			throw new IllegalFormatException("L'identifiant n'est pas au bon format.");
+			throw new IllegalArgumentException("L'identifiant n'est pas au bon format.");
 		}
 		super.setUserId(userId);
 	}
@@ -173,13 +173,14 @@ public class Client extends Utilisateur {
 	 * attendu pour un identifiant de compte client. à savoir, une lettre, un
 	 * point, une lettre au moins, chiffre entre 1 et 9, et éventuellement une
 	 * succession de chiffres entre 0 et 9 supplémentaires (Par exemple :
-	 * d.dupont123)
+	 * d.dupont123, format : c.aaaaa1234)
 	 * 
 	 * @param s
 	 *            : String d'entrée qu'on veut comparer au format attendu
 	 * @return boolean : résultat de la comparaison. True si le format est
 	 *         correct, false sinon
 	 */
+
 	public static boolean checkFormatUserIdClient(String s) {
 		return Pattern.matches("^[a-z]\\.[a-z]+[1-9]\\d*$", s);
 	}
@@ -188,14 +189,14 @@ public class Client extends Utilisateur {
 	 * Fonction qui va vérifier le string d'entrée s'il correspond au format
 	 * attendu pour un numéro de client, à savoir, 9 chiffres successifs (Par
 	 * exemple 1234567890)
-	 * 
+	 *
 	 * @param s
 	 *            : String d'entrée qu'on veut comparer au format attendu
 	 * @return boolean : résultat de la comparaison. True si le format est
 	 *         correct, false sinon
 	 */
 	public static boolean checkFormatNumeroClient(String s) {
-		return Pattern.matches("\\d{10}", s);
+		return Pattern.matches("\\d{9}", s);
 	}
 
 	/**
