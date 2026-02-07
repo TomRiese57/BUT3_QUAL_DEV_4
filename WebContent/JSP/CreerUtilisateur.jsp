@@ -50,7 +50,7 @@
             <div class="form-grid">
                 <div class="form-section">
                     <s:textfield label="Code utilisateur" name="userId" 
-                                placeholder="Code unique"
+                                placeholder="Numéro unique (exemple : c.dupont4)"
                                 style="width: 100%;" />
                 </div>
                 
@@ -95,7 +95,7 @@
             
             <div class="form-section">
                 <s:textfield label="Numéro de client" name="numClient" 
-                            placeholder="Numéro de client"
+                            placeholder="Numéro de client (9 chiffres)"
                             style="width: 100%;" />
             </div>
             
