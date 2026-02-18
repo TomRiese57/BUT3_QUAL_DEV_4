@@ -182,7 +182,10 @@ public class Client extends Utilisateur {
 	 */
 
 	public static boolean checkFormatUserIdClient(String s) {
-		return Pattern.matches("^[a-z]\\.[a-z]+[1-9]\\d*$", s);
+        if (s == null) {
+            return false;
+        }
+        return Pattern.matches("^[a-z]\\.[a-z]+[1-9]\\d*$", s);
 	}
 
 	/**
