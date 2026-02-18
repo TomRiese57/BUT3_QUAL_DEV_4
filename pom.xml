@@ -38,19 +38,22 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
+
+                <configuration>
+                    <includes>
+                        <include>com/iut/banque/**/*</include>
+                    </includes>
+                </configuration>
                 <executions>
-                    <!--  Active l’agent JaCoCo pendant les tests  -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <!--  Génère le rapport XML + HTML après tests  -->
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>
-                        <!--  après test  -->
                         <goals>
                             <goal>report</goal>
                         </goals>

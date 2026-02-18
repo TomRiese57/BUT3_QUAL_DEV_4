@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iut.banque.controller.ChangePasswordAction;
-import com.iut.banque.cryptage.PasswordHasher;
 import com.iut.banque.facade.BanqueFacade;
 import com.iut.banque.modele.Client;
 

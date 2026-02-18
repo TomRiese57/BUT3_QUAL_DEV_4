@@ -18,12 +18,12 @@ public class TestLoginConstants {
 
     @Test
     public void testLoginFailed() {
-        assertEquals(-1, LoginConstants.LOGIN_FAILED);
+        assertEquals(LoginConstants.LOGIN_FAILED, -1);
     }
 
     @Test
     public void testError() {
-        assertEquals(-2, LoginConstants.ERROR);
+        assertEquals(LoginConstants.ERROR, -2);
     }
 
     @Test(expected = UnsupportedOperationException.class)

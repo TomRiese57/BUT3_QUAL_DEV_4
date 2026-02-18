@@ -40,7 +40,7 @@ public class TestCreerUtilisateur {
     }
 
     @Test
-    public void testCreationClientSuccess() throws Exception {
+    public void testCreationClientSuccess() {
         assertEquals("SUCCESS", action.creationUtilisateur());
         assertTrue(action.getMessage().contains("c.new1"));
         assertEquals("SUCCESS", action.getResult());

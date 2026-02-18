@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import com.iut.banque.cryptage.PasswordHasher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -232,34 +236,48 @@ public class DaoHibernate implements IDao {
     }
 
     /**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Map<String, Client> getAllClients() {
-		Session session = sessionFactory.getCurrentSession();
-		@SuppressWarnings("unchecked")
-		List<Object> res = session.createCriteria(Client.class).list();
-		Map<String, Client> ret = new HashMap<>();
-		for (Object client : res) {
-			ret.put(((Client) client).getUserId(), (Client) client);
-		}
-		return ret;
-	}
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Client> getAllClients() {
+        Session session = sessionFactory.getCurrentSession();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Map<String, Gestionnaire> getAllGestionnaires() {
-		Session session = sessionFactory.getCurrentSession();
-		@SuppressWarnings("unchecked")
-		List<Object> res = session.createCriteria(Gestionnaire.class).list();
-		Map<String, Gestionnaire> ret = new HashMap<>();
-		for (Object gestionnaire : res) {
-			ret.put(((Gestionnaire) gestionnaire).getUserId(), (Gestionnaire) gestionnaire);
-		}
-		return ret;
-	}
+        // Remplacement de createCriteria par JPA CriteriaBuilder (Standard & Compatible)
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Client> query = builder.createQuery(Client.class);
+        Root<Client> root = query.from(Client.class);
+        query.select(root);
+
+        List<Client> res = session.createQuery(query).getResultList();
+
+        Map<String, Client> ret = new HashMap<>();
+        for (Client client : res) {
+            ret.put(client.getUserId(), client);
+        }
+        return ret;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Gestionnaire> getAllGestionnaires() {
+        Session session = sessionFactory.getCurrentSession();
+
+        // Remplacement de createCriteria par JPA CriteriaBuilder
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Gestionnaire> query = builder.createQuery(Gestionnaire.class);
+        Root<Gestionnaire> root = query.from(Gestionnaire.class);
+        query.select(root);
+
+        List<Gestionnaire> res = session.createQuery(query).getResultList();
+
+        Map<String, Gestionnaire> ret = new HashMap<>();
+        for (Gestionnaire gestionnaire : res) {
+            ret.put(gestionnaire.getUserId(), gestionnaire);
+        }
+        return ret;
+    }
 
 	/**
 	 * {@inheritDoc}

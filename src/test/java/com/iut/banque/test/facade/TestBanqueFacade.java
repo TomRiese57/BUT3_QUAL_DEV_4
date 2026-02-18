@@ -38,7 +38,7 @@ public class TestBanqueFacade {
     }
 
     @Test
-    public void testTryLoginUser() throws Exception {
+    public void testTryLoginUser() {
         when(mockLoginManager.tryLogin("j.doe1", "pwd")).thenReturn(LoginConstants.USER_IS_CONNECTED);
 
         int result = facade.tryLogin("j.doe1", "pwd");
@@ -47,7 +47,7 @@ public class TestBanqueFacade {
     }
 
     @Test
-    public void testTryLoginManagerLoadsClients() throws Exception {
+    public void testTryLoginManagerLoadsClients() {
         when(mockLoginManager.tryLogin("admin", "pwd")).thenReturn(LoginConstants.MANAGER_IS_CONNECTED);
 
         int result = facade.tryLogin("admin", "pwd");

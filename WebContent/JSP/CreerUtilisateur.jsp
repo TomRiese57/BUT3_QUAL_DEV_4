@@ -80,14 +80,14 @@
             </div>
             
             <div class="form-section">
-                <label>Sexe :</label>
+                <label><input type="text" />Sexe :</label>
                 <s:radio label="" name="male" 
                         list="#{true:'Homme',false:'Femme'}"
                         value="true" />
             </div>
             
             <div class="form-section">
-                <label>Type :</label>
+                <label><input type="text" />Type :</label>
                 <s:radio label="" name="client"
                         list="#{true:'Client',false:'Manager'}" 
                         value="true" />

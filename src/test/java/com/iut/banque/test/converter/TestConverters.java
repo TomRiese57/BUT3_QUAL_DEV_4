@@ -21,7 +21,7 @@ public class TestConverters {
     private IDao mockDao;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mockDao = mock(IDao.class);
         AccountConverter.setDao(mockDao);
         ClientConverter.setDao(mockDao);

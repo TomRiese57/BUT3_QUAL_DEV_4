@@ -7,8 +7,6 @@ import org.junit.Test;
 import com.iut.banque.controller.ResultatSuppression;
 import com.iut.banque.modele.*;
 
-import com.iut.banque.exceptions.IllegalFormatException;
-
 public class TestResultatSuppression {
 
     private ResultatSuppression action;
@@ -19,8 +17,7 @@ public class TestResultatSuppression {
     }
 
     @Test
-    public void testGetSetCompte() throws IllegalFormatException {
-        Client client = new Client();
+    public void testGetSetCompte() {
         CompteSansDecouvert compte = new CompteSansDecouvert();
         action.setCompte(compte);
         assertEquals(compte, action.getCompte());

@@ -58,7 +58,7 @@ public class TestDetailCompteEdit {
     }
 
     @Test
-    public void testChangementDecouvertNotCompteAvecDecouvert() throws Exception {
+    public void testChangementDecouvertNotCompteAvecDecouvert() {
         when(mockFacade.getConnectedUser()).thenReturn(client);
         action.setCompte(compteSansDecouvert);
         action.setDecouvertAutorise("200");
@@ -66,7 +66,7 @@ public class TestDetailCompteEdit {
     }
 
     @Test
-    public void testChangementDecouvertNumberFormatException() throws Exception {
+    public void testChangementDecouvertNumberFormatException() {
         when(mockFacade.getConnectedUser()).thenReturn(client);
         action.setCompte(compteAvecDecouvert);
         action.setDecouvertAutorise("notanumber");

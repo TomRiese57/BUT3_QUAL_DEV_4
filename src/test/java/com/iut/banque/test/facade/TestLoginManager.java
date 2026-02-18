@@ -11,7 +11,6 @@ import com.iut.banque.facade.LoginManager;
 import com.iut.banque.interfaces.IDao;
 import com.iut.banque.modele.Client;
 import com.iut.banque.modele.Gestionnaire;
-import com.iut.banque.modele.Utilisateur;
 
 public class TestLoginManager {
 
