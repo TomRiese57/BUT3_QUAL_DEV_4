@@ -80,10 +80,9 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `male`, `type`, `numClient`) VALUES
-('a', 'a', 'a', 'a', 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb', b'1', 'MANAGER', NULL),
-('admin', 'Smith', 'Joe', '123, grande rue, Metz', '713bfda78870bf9d1b261f565286f85e97ee614efe5f0faf7c34e7ca4f65baca', b'1', 'MANAGER', ''),
-('client1', 'client1', 'Jane', '45, grand boulevard, Brest', '11fa5aade33a4f8ea1cbf309f610092bdf7e50526ffdc08f17b0ea046f97961f', b'1', 'CLIENT', '123456789'),
-('client2', 'client2', 'Jane', '45, grand boulevard, Brest', '699a3eec2c9f94989c141222ea8083e02e3d8174a749816e789fcd583878aa75', b'1', 'CLIENT', '123456788');
+('admin', 'Smith', 'Joe', '123, grande rue, Metz', 'cd916028a2d8a1b901e831246dd5b9b4d3832786ddc63bbf5af4b50d9fc98f50', b'1', 'MANAGER', ''),
+('client1', 'client1', 'Jane', '45, grand boulevard, Brest', '2331708682afe6944b558cb54b278d38b0c0fde0e0886c98566f17499a478eae', b'1', 'CLIENT', '123456789'),
+('client2', 'client2', 'Jane', '45, grand boulevard, Brest', 'ad59ce6973e8657266c468c423827a9b9ca1b1fc39d2b9029ba8148ed327f5b1', b'1', 'CLIENT', '123456788');
 
 --
 -- Contraintes pour les tables déchargées
