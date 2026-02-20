@@ -424,5 +424,57 @@
             <result name="error">/JSP/DetailCompte.jsp</result>
         </action>
 
+        <!-- Afficher la liste des cartes du client connecté -->
+        <action name="mesCartes" class="com.iut.banque.controller.CarteAction"
+                method="listerCartes">
+            <result name="success">/JSP/GestionCartes.jsp</result>
+            <result name="error">/JSP/Connect.jsp</result>
+        </action>
+
+        <!-- Créer une nouvelle carte -->
+        <action name="carteCreer" class="com.iut.banque.controller.CarteAction"
+                method="creerCarte">
+            <result name="success" type="redirectAction">mesCartes</result>
+            <result name="input"   type="redirectAction">mesCartes</result>
+            <result name="error"   type="redirectAction">mesCartes</result>
+        </action>
+
+        <!-- Bloquer une carte -->
+        <action name="carteBloquer" class="com.iut.banque.controller.CarteAction"
+                method="bloquerCarte">
+            <result name="success" type="redirectAction">mesCartes</result>
+            <result name="error"   type="redirectAction">mesCartes</result>
+        </action>
+
+        <!-- Débloquer une carte -->
+        <action name="carteDebloquer" class="com.iut.banque.controller.CarteAction"
+                method="debloquerCarte">
+            <result name="success" type="redirectAction">mesCartes</result>
+            <result name="error"   type="redirectAction">mesCartes</result>
+        </action>
+
+        <!-- Basculer mode paiement (immédiat ↔ différé) -->
+        <action name="carteBasculerMode" class="com.iut.banque.controller.CarteAction"
+                method="basculerMode">
+            <result name="success" type="redirectAction">mesCartes</result>
+            <result name="error"   type="redirectAction">mesCartes</result>
+        </action>
+
+        <!-- Modifier plafond de paiement -->
+        <action name="carteModifierPlafondPaiement"
+                class="com.iut.banque.controller.CarteAction"
+                method="modifierPlafondPaiement">
+            <result name="success" type="redirectAction">mesCartes</result>
+            <result name="error"   type="redirectAction">mesCartes</result>
+        </action>
+
+        <!-- Modifier plafond de retrait -->
+        <action name="carteModifierPlafondRetrait"
+                class="com.iut.banque.controller.CarteAction"
+                method="modifierPlafondRetrait">
+            <result name="success" type="redirectAction">mesCartes</result>
+            <result name="error"   type="redirectAction">mesCartes</result>
+        </action>
+
 	</package>
 </struts>

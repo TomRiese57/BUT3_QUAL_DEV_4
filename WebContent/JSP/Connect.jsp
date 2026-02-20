@@ -66,6 +66,9 @@
         <s:form action="changePasswordPage" method="POST" style="display:inline; margin-left:10px;">
             <s:submit value="🔑 Changer mot de passe" />
         </s:form>
+        <s:form action="mesCartes" method="POST" style="display:inline; margin-left:10px;">
+            <s:submit value="💳 Mes cartes" />
+        </s:form>
     </div>
     
     <h1>💼 Tableau de bord</h1>
