@@ -296,5 +296,133 @@
 			<result>/JSP/CreerUtilisateur.jsp</result>
 		</action>
 
+        <!-- ========== Gestion des cartes bancaires ========== -->
+
+        <!-- Liste des cartes d'un compte -->
+        <action name="listerCartes" class="com.iut.banque.controller.CarteAction"
+                method="listerCartes">
+            <result name="success">/JSP/GestionCartes.jsp</result>
+            <result name="error">/JSP/Connect-Manager.jsp</result>
+        </action>
+
+        <!-- Création d'une carte -->
+        <action name="creerCarte" class="com.iut.banque.controller.CarteAction"
+                method="creerCarte">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{compte.numeroCompte}</param>
+            </result>
+            <result name="input">/JSP/GestionCartes.jsp</result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Suppression d'une carte -->
+        <action name="supprimerCarte" class="com.iut.banque.controller.CarteAction"
+                method="supprimerCarte">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+            </result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Blocage -->
+        <action name="bloquerCarte" class="com.iut.banque.controller.CarteAction"
+                method="bloquerCarte">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+            </result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Déblocage -->
+        <action name="debloquerCarte" class="com.iut.banque.controller.CarteAction"
+                method="debloquerCarte">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+            </result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Modifier plafond paiement -->
+        <action name="modifierPlafondPaiement" class="com.iut.banque.controller.CarteAction"
+                method="modifierPlafondPaiement">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+            </result>
+            <result name="input">/JSP/GestionCartes.jsp</result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Modifier plafond retrait -->
+        <action name="modifierPlafondRetrait" class="com.iut.banque.controller.CarteAction"
+                method="modifierPlafondRetrait">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+            </result>
+            <result name="input">/JSP/GestionCartes.jsp</result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Bascule mode paiement -->
+        <action name="basculerModePaiement" class="com.iut.banque.controller.CarteAction"
+                method="basculerModePaiement">
+            <result name="success" type="redirectAction">
+                <param name="actionName">listerCartes</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+            </result>
+            <result name="error">/JSP/GestionCartes.jsp</result>
+        </action>
+
+        <!-- Paiement par carte (client) -->
+        <action name="paiementCarte" class="com.iut.banque.controller.CarteAction"
+                method="effectuerPaiement">
+            <result name="success">/JSP/DetailCompte.jsp</result>
+            <result name="CARTE_BLOQUEE" type="redirectAction">
+                <param name="actionName">urlDetail</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+                <param name="error">CARTE_BLOQUEE</param>
+            </result>
+            <result name="PLAFOND_DEPASSE" type="redirectAction">
+                <param name="actionName">urlDetail</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+                <param name="error">PLAFOND_DEPASSE</param>
+            </result>
+            <result name="SOLDE_INSUFFISANT" type="redirectAction">
+                <param name="actionName">urlDetail</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+                <param name="error">BUSINESS</param>
+            </result>
+            <result name="input">/JSP/DetailCompte.jsp</result>
+            <result name="error">/JSP/DetailCompte.jsp</result>
+        </action>
+
+        <!-- Retrait ATM (client) -->
+        <action name="retraitCarte" class="com.iut.banque.controller.CarteAction"
+                method="effectuerRetrait">
+            <result name="success">/JSP/DetailCompte.jsp</result>
+            <result name="CARTE_BLOQUEE" type="redirectAction">
+                <param name="actionName">urlDetail</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+                <param name="error">CARTE_BLOQUEE</param>
+            </result>
+            <result name="PLAFOND_DEPASSE" type="redirectAction">
+                <param name="actionName">urlDetail</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+                <param name="error">PLAFOND_DEPASSE</param>
+            </result>
+            <result name="SOLDE_INSUFFISANT" type="redirectAction">
+                <param name="actionName">urlDetail</param>
+                <param name="compte">%{carte.compte.numeroCompte}</param>
+                <param name="error">BUSINESS</param>
+            </result>
+            <result name="input">/JSP/DetailCompte.jsp</result>
+            <result name="error">/JSP/DetailCompte.jsp</result>
+        </action>
+
 	</package>
 </struts>

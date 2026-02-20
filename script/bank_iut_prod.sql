@@ -85,6 +85,35 @@ INSERT INTO `utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `mal
 ('client2', 'client2', 'Jane', '45, grand boulevard, Brest', 'ad59ce6973e8657266c468c423827a9b9ca1b1fc39d2b9029ba8148ed327f5b1', b'1', 'CLIENT', '123456788');
 
 --
+-- Structure de la table `carte_bancaire`
+--
+
+DROP TABLE IF EXISTS `carte_bancaire`;
+
+CREATE TABLE IF NOT EXISTS `carte_bancaire` (
+    `numero_carte`               VARCHAR(16)     NOT NULL,
+    `numero_compte`              VARCHAR(50)     NOT NULL,
+    `paiement_differe`           TINYINT(1)      NOT NULL DEFAULT 0   COMMENT '1=différé, 0=immédiat',
+    `plafond_paiement`           DOUBLE          NOT NULL DEFAULT 3000,
+    `plafond_retrait`            DOUBLE          NOT NULL DEFAULT 1000,
+    `paiements_mois_courant`     DOUBLE          NOT NULL DEFAULT 0,
+    `retraits_mois_courant`      DOUBLE          NOT NULL DEFAULT 0,
+    `montant_differe_en_attente` DOUBLE          NOT NULL DEFAULT 0,
+    `bloquee`                    TINYINT(1)      NOT NULL DEFAULT 0,
+    `date_expiration`            DATE            NOT NULL,
+    PRIMARY KEY (`numero_carte`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Données de test
+INSERT INTO `carte_bancaire`
+(`numero_carte`, `numero_compte`, `paiement_differe`, `plafond_paiement`,
+ `plafond_retrait`, `paiements_mois_courant`, `retraits_mois_courant`,
+ `montant_differe_en_attente`, `bloquee`, `date_expiration`)
+VALUES
+    ('1234567890123456', 'BD4242424242', 0, 3000, 1000, 150,  50,   0,   0, DATE_ADD(CURDATE(), INTERVAL 3 YEAR)),
+    ('9876543210987654', 'FF5050500202', 1, 2000,  800, 300,   0, 300,   0, DATE_ADD(CURDATE(), INTERVAL 3 YEAR)),
+    ('1111222233334444', 'LA1021931215', 0, 1500,  500,   0,   0,   0,   1, DATE_ADD(CURDATE(), INTERVAL 2 YEAR));
+--
 -- Contraintes pour les tables déchargées
 --
 
@@ -93,6 +122,10 @@ INSERT INTO `utilisateur` (`userId`, `nom`, `prenom`, `adresse`, `userPwd`, `mal
 --
 ALTER TABLE `compte`
   ADD CONSTRAINT `fk_Compte_userId` FOREIGN KEY (`userId`) REFERENCES `utilisateur` (`userId`);
+COMMIT;
+
+ALTER TABLE `carte_bancaire`
+    ADD CONSTRAINT `fk_carte_compte` FOREIGN KEY (`numero_compte`) REFERENCES `compte` (`numeroCompte`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

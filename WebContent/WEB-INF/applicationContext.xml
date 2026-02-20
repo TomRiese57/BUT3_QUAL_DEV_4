@@ -99,4 +99,18 @@
 		class="com.iut.banque.converter.AccountConverter" scope="singleton">
         <property name="dao" ref="daoHibernate"/>
     </bean>
+
+    <!-- DAO des cartes (Hibernate)-->
+    <bean id="carteDaoHibernate"
+          class="com.iut.banque.dao.CarteDaoHibernate"
+          scope="singleton">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <!-- Manager des cartes (service métier) -->
+    <bean id="carteManager"
+          class="com.iut.banque.facade.CarteManager"
+          scope="singleton">
+        <property name="carteDao" ref="carteDaoHibernate" />
+    </bean>
 </beans>
