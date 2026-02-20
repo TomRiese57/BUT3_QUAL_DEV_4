@@ -289,6 +289,17 @@ public class BanqueFacade {
 	}
 
     /**
+     * Méthode pour récupérer un utilisateur par son identifiant
+     *
+     * @param userId
+     *            : String correspondant à l'ID de l'utilisateur
+     * @return Utilisateur : l'utilisateur correspondant, null si non trouvé
+     */
+    public Utilisateur getUserById(String userId) {
+        return banqueManager.getUserById(userId);
+    }
+
+    /**
      * Méthode pour mettre à jour un utilisateur dans la base de données
      *
      * @param utilisateur

@@ -5,10 +5,10 @@
 <html lang="fr" xml:lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Page de connexion</title>
+    <title>Réinitialisation du mot de passe</title>
     <link rel="stylesheet" href="/_00_ASBank2023/style/style.css" />
     <style>
-        .login-container {
+        .reset-container {
             max-width: 500px;
             margin: 3rem auto;
             background: white;
@@ -17,17 +17,17 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
-        .login-header {
+        .reset-header {
             text-align: center;
             margin-bottom: 2rem;
         }
         
-        .login-header h1 {
+        .reset-header h2 {
+            color: #1e3a8a;
             margin: 0;
-            font-size: 1.75rem;
         }
         
-        .login-icon {
+        .reset-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
@@ -36,7 +36,7 @@
             margin-bottom: 1.5rem;
         }
         
-        .security-note {
+        .info-note {
             margin-top: 2rem;
             padding: 1rem;
             background: #f8fafc;
@@ -48,45 +48,48 @@
     </style>
 </head>
 <body>
-    <h1>🔐 Connexion à votre espace</h1>
+    <h1>🔑 Réinitialisation du mot de passe</h1>
     
-    <div class="login-container">
-        <div class="login-header">
-            <div class="login-icon">🏦</div>
-            <h2 style="color: #1e3a8a; margin: 0;">Identifiez-vous</h2>
+    <div class="reset-container">
+        <div class="reset-header">
+            <div class="reset-icon">🔓</div>
+            <h2>Nouveau mot de passe</h2>
         </div>
         
-        <s:form name="myForm" action="controller.Connect.login.action" method="POST">
+        <s:actionerror cssClass="errors" />
+        <s:actionmessage cssClass="messages" />
+        
+        <s:form name="resetForm" action="resetPassword" method="POST">
             <div class="form-group">
                 <s:textfield label="Code utilisateur" name="userCde" 
                             placeholder="Votre code utilisateur" />
             </div>
             
             <div class="form-group">
-                <s:password label="Mot de passe" name="userPwd" 
-                           placeholder="Votre mot de passe" />
+                <s:password label="Nouveau mot de passe" name="newPassword" 
+                           placeholder="Minimum 6 caractères" />
+            </div>
+            
+            <div class="form-group">
+                <s:password label="Confirmer le mot de passe" name="confirmPassword" 
+                           placeholder="Confirmez votre mot de passe" />
             </div>
             
             <div style="margin-top: 2rem;">
-                <s:submit name="submit" value="Se connecter" 
+                <s:submit name="submit" value="Réinitialiser le mot de passe" 
                          style="width: 100%; padding: 1rem;" />
             </div>
         </s:form>
         
-        <div style="text-align: center; margin-top: 1rem;">
-            <s:url action="redirectionResetPassword" var="resetPwdUrl"></s:url>
-            <s:a href="%{resetPwdUrl}">🔑 Mot de passe oublié ?</s:a>
-        </div>
-        
         <div style="margin-top: 1.5rem;">
-            <s:form name="myFormRetour" action="retourAccueil" method="POST">
-                <s:submit name="Retour" value="← Retour à l'accueil" 
+            <s:form name="retourLogin" action="redirectionLogin" method="POST">
+                <s:submit name="Retour" value="← Retour à la connexion" 
                          style="width: 100%; background: linear-gradient(135deg, #64748b 0%, #475569 100%);" />
             </s:form>
         </div>
         
-        <div class="security-note">
-            🔒 Connexion sécurisée - Vos données sont protégées
+        <div class="info-note">
+            🔒 Saisissez votre code utilisateur et choisissez un nouveau mot de passe
         </div>
     </div>
     

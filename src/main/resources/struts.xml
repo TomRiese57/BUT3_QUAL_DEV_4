@@ -58,6 +58,18 @@
 			<result>/JSP/Login.jsp</result>
 		</action>
 
+		<!-- Réinitialisation du mot de passe -->
+		<action name="redirectionResetPassword" class="com.iut.banque.controller.ResetPasswordAction"
+			method="showPage">
+			<result name="success">/JSP/ResetPasswordAction.jsp</result>
+		</action>
+
+		<action name="resetPassword" class="com.iut.banque.controller.ResetPasswordAction">
+			<result name="success">/JSP/ResetPasswordAction.jsp</result>
+			<result name="input">/JSP/ResetPasswordAction.jsp</result>
+			<result name="error">/JSP/ResetPasswordAction.jsp</result>
+		</action>
+
 		<!-- Appel de la page compte avec un paramètre donné -->
 
 		<action name="urlDetail" class="com.iut.banque.controller.DetailCompte">
