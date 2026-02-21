@@ -8,79 +8,50 @@
     <title>Tableau de bord</title>
     <link rel="stylesheet" href="/_00_ASBank2023/style/style.css" />
     <style>
-        .welcome-box {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-left: 4px solid #3b82f6;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin: 2rem auto;
-            max-width: 90%;
-            text-align: center;
-        }
-        
-        .welcome-box b {
-            color: #1e40af;
-        }
-        
-        .section-header {
-            text-align: center;
-            color: #1e3a8a;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 2rem 0 1.5rem 0;
-        }
-        
         .account-badge {
-            padding: 0.375rem 0.875rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.8125rem;
             font-weight: 500;
+            border: 1px solid transparent;
         }
-        
         .badge-overdraft {
-            background: #dbeafe;
-            color: #1e40af;
+            background: var(--blue-50);
+            color: var(--blue-800);
+            border-color: var(--blue-100);
         }
-        
         .badge-simple {
-            background: #f1f5f9;
-            color: #475569;
-        }
-        
-        .info-tip {
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-radius: 12px;
-            max-width: 90%;
-            text-align: center;
-            color: #92400e;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border-color: var(--gray-200);
         }
     </style>
 </head>
 <body>
+
+    <!-- Barre de navigation : en haut, avant le h1 -->
     <div class="btnLogout">
         <s:form name="myForm" action="logout" method="POST">
             <s:submit name="Retour" value="🚪 Déconnexion" />
         </s:form>
-        <s:form action="changePasswordPage" method="POST" style="display:inline; margin-left:10px;">
+        <s:form action="changePasswordPage" method="POST">
             <s:submit value="🔑 Changer mot de passe" />
         </s:form>
-        <s:form action="mesCartes" method="POST" style="display:inline; margin-left:10px;">
+        <s:form action="mesCartes" method="POST">
             <s:submit value="💳 Mes cartes" />
         </s:form>
     </div>
-    
+
     <h1>💼 Tableau de bord</h1>
-    
+
     <div class="welcome-box">
-        <p style="margin: 0; font-size: 1.125rem;">
+        <p style="margin:0; font-size:1.0625rem;">
             Bienvenue <b><s:property value="connectedUser.prenom" /> <s:property value="connectedUser.nom" /></b> !
         </p>
     </div>
-    
+
     <p class="section-header">📊 Vos comptes bancaires</p>
-    
+
     <table>
         <thead>
             <tr>
@@ -94,14 +65,14 @@
                 <tr>
                     <td>
                         <s:url action="urlDetail" var="urlDetail">
-                            <s:param name="compte"><s:property value="key" /></s:param> 
+                            <s:param name="compte"><s:property value="key" /></s:param>
                         </s:url>
-                        <s:a href="%{urlDetail}" style="font-weight: 600;">
+                        <s:a href="%{urlDetail}" style="font-weight:600;">
                             🏦 <s:property value="key" />
                         </s:a>
                     </td>
                     <td>
-                        <s:if test="%{value.className == \"CompteAvecDecouvert\"}">
+                        <s:if test="%{value.className == 'CompteAvecDecouvert'}">
                             <span class="account-badge badge-overdraft">Découvert possible</span>
                         </s:if>
                         <s:else>
@@ -110,12 +81,12 @@
                     </td>
                     <td>
                         <s:if test="%{value.solde >= 0}">
-                            <span style="color: #10b981; font-weight: 700; font-size: 1.125rem;">
+                            <span style="color:var(--success);font-weight:700;font-size:1.0625rem;">
                                 <s:property value="value.solde" /> €
                             </span>
                         </s:if>
                         <s:else>
-                            <span class="soldeNegatif" style="font-size: 1.125rem;">
+                            <span class="soldeNegatif">
                                 <s:property value="value.solde" /> €
                             </span>
                         </s:else>
@@ -124,11 +95,11 @@
             </s:iterator>
         </tbody>
     </table>
-    
-    <div class="info-tip">
+
+    <div class="info-tip" style="text-align:center;">
         💡 <strong>Astuce :</strong> Cliquez sur un numéro de compte pour voir les détails et effectuer des opérations
     </div>
-    
+
     <jsp:include page="/JSP/Footer.jsp" />
 </body>
 </html>

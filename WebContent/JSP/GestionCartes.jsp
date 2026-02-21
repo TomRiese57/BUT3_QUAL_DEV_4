@@ -327,13 +327,13 @@
                     <div class="form-field">
                         <label for="nouveauPlafondPaiement">Plafond paiements (€)</label>
                         <input type="number" name="nouveauPlafondPaiement" id="nouveauPlafondPaiement"
-                               value="3000" min="1" step="100" />
+                               value="3000" />
                     </div>
 
                     <div class="form-field">
                         <label for="nouveauPlafondRetrait">Plafond retraits (€)</label>
                         <input type="number" name="nouveauPlafondRetrait" id="nouveauPlafondRetrait"
-                               value="1000" min="1" step="100" />
+                               value="1000" />
                     </div>
 
                     <div class="form-field">
@@ -500,7 +500,7 @@
                                         <label style="font-size:.8rem;white-space:nowrap;">💳 Paiement</label>
                                         <input type="number" name="nouveauPlafondPaiement"
                                                value="<s:property value='#c.plafondPaiement' />"
-                                               min="1" step="100" />
+                                               />
                                         <button type="submit" class="btn-small">OK</button>
                                     </div>
                                 </s:form>
@@ -512,7 +512,7 @@
                                         <label style="font-size:.8rem;white-space:nowrap;">🏧 Retrait</label>
                                         <input type="number" name="nouveauPlafondRetrait"
                                                value="<s:property value='#c.plafondRetrait' />"
-                                               min="1" step="100" />
+                                               />
                                         <button type="submit" class="btn-small">OK</button>
                                     </div>
                                 </s:form>

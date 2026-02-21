@@ -8,108 +8,85 @@ import com.iut.banque.modele.CarteBancaire.PlafondDepasseException;
 import com.iut.banque.modele.CarteBancaire.SoldeInsuffisantException;
 import com.iut.banque.modele.Client;
 import com.iut.banque.modele.Compte;
+import com.iut.banque.modele.Utilisateur;
+import com.iut.banque.exceptions.TechnicalException;
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.struts2.interceptor.SessionAware;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.struts2.ServletActionContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Contrôleur Struts 2 pour la gestion des cartes bancaires côté client.
  *
- * <p>Injecté par Spring via {@code @Autowired} sur le setter —
- * pattern identique aux autres controllers du projet.</p>
+ * <p>Suit le même pattern que les autres controllers du projet :
+ * récupération des beans Spring via le contexte web dans le constructeur,
+ * et accès à l'utilisateur connecté via {@link BanqueFacade#getConnectedUser()}.</p>
+ *
+ * <p>Toutes les actions de cette classe sont accessibles au client connecté
+ * (pas de restriction gestionnaire).</p>
  */
-public class CarteAction extends ActionSupport implements SessionAware {
+public class CarteAction extends ActionSupport {
 
     private static final long serialVersionUID = 1L;
 
     // ------------------------------------------------------------------ //
-    //  Codes de résultat spécifiques métier                              //
-    // ------------------------------------------------------------------ //
-    public static final String CARTE_BLOQUEE        = "CARTE_BLOQUEE";
-    public static final String PLAFOND_DEPASSE      = "PLAFOND_DEPASSE";
-    public static final String SOLDE_INSUFFISANT    = "SOLDE_INSUFFISANT";
-
-    // ------------------------------------------------------------------ //
-    //  Injection Spring                                                  //
+    //  Beans Spring récupérés dans le constructeur                       //
     // ------------------------------------------------------------------ //
 
-    private CarteManager carteManager;
-    private BanqueFacade banqueFacade;
-
-    @Autowired
-    public void setCarteManager(CarteManager carteManager) {
-        this.carteManager = carteManager;
-    }
-
-    @Autowired
-    public void setBanqueFacade(BanqueFacade banqueFacade) {
-        this.banqueFacade = banqueFacade;
-    }
+    private transient CarteManager carteManager;
+    private transient BanqueFacade banque;
 
     // ------------------------------------------------------------------ //
-    //  Session Struts                                                    //
+    //  Paramètres liés par Struts depuis les formulaires                 //
     // ------------------------------------------------------------------ //
 
-    private Map<String, Object> session;
-
-    @Override
-    public void setSession(Map<String, Object> session) {
-        this.session = session;
-    }
-
-    // ------------------------------------------------------------------ //
-    //  Paramètres d'entrée (liés par Struts depuis les formulaires)     //
-    // ------------------------------------------------------------------ //
-
-    /** Numéro de carte (16 chiffres). */
+    /** Numéro de carte ciblée par l'opération (16 chiffres). */
     private String numeroCarte;
 
     /** Numéro de compte pour la création d'une carte. */
     private String numeroCompte;
 
-    /** Montant saisi (paiement ou retrait). */
-    private double montant;
-
-    /** Nouveau plafond de paiement. */
+    /** Nouveau plafond de paiement saisi. */
     private double nouveauPlafondPaiement;
 
-    /** Nouveau plafond de retrait. */
+    /** Nouveau plafond de retrait saisi. */
     private double nouveauPlafondRetrait;
 
-    /** true = mode différé demandé lors de la création. */
+    /** Mode paiement différé (true = différé, false = immédiat). */
     private boolean paiementDiffere;
 
     // ------------------------------------------------------------------ //
-    //  Données exposées à la vue                                        //
+    //  Données exposées à la vue                                         //
     // ------------------------------------------------------------------ //
 
-    /** Liste des cartes à afficher dans la vue. */
+    /** Liste de toutes les cartes du client connecté. */
     private List<CarteBancaire> cartes = new ArrayList<>();
 
-    /** Carte ciblée par l'opération courante. */
-    private CarteBancaire carte;
+    // ------------------------------------------------------------------ //
+    //  Constructeur — injection Spring                                   //
+    // ------------------------------------------------------------------ //
 
-    /** Message de confirmation ou d'erreur affiché dans la JSP. */
-    private String messageRetour;
+    public CarteAction() {
+        ApplicationContext ctx = WebApplicationContextUtils
+                .getRequiredWebApplicationContext(
+                        ServletActionContext.getServletContext());
+        this.banque       = (BanqueFacade) ctx.getBean("banqueFacade");
+        this.carteManager = (CarteManager)  ctx.getBean("carteManager");
+    }
 
-    /** Indicateur d'erreur pour la vue. */
-    private boolean erreur;
-
-    // ================================================================== //
+    // ------------------------------------------------------------------ //
     //  Helpers privés                                                    //
-    // ================================================================== //
+    // ------------------------------------------------------------------ //
 
     /**
-     * Retourne le client actuellement connecté depuis la session Struts.
-     *
-     * @return le {@link Client} connecté, ou {@code null} si absent.
+     * Retourne le client connecté, ou {@code null} si l'utilisateur n'est
+     * pas un {@link Client} (ex: gestionnaire ou session expirée).
      */
     private Client getClientConnecte() {
-        Object user = session.get("connectedUser");
+        Utilisateur user = banque.getConnectedUser();
         if (user instanceof Client) {
             return (Client) user;
         }
@@ -117,17 +94,17 @@ public class CarteAction extends ActionSupport implements SessionAware {
     }
 
     /**
-     * Charge les cartes du client connecté dans {@link #cartes}.
-     * Parcourt tous ses comptes et agrège leurs cartes via le manager.
+     * Charge dans {@link #cartes} toutes les cartes de tous les comptes
+     * du client actuellement connecté.
      */
     private void chargerCartesClient() {
         Client client = getClientConnecte();
+        cartes = new ArrayList<>();
         if (client == null) {
             return;
         }
-        cartes = new ArrayList<>();
-        for (Compte compte : client.getAccounts().values()) {
-            List<CarteBancaire> cartesCompte = carteManager.getCartesParCompte(compte);
+        for (Compte c : client.getAccounts().values()) {
+            List<CarteBancaire> cartesCompte = carteManager.getCartesParCompte(c);
             if (cartesCompte != null) {
                 cartes.addAll(cartesCompte);
             }
@@ -135,21 +112,24 @@ public class CarteAction extends ActionSupport implements SessionAware {
     }
 
     /**
-     * Recherche et retourne la carte identifiée par {@link #numeroCarte}.
+     * Trouve la carte correspondant à {@link #numeroCarte} dans la DAO.
      *
      * @return la carte trouvée, ou {@code null}.
      */
     private CarteBancaire trouverCarte() {
-        return carteManager.getCarteParNumero(numeroCarte);
+        if (numeroCarte == null || numeroCarte.trim().isEmpty()) {
+            return null;
+        }
+        return carteManager.getCarteParNumero(numeroCarte.trim());
     }
 
     // ================================================================== //
-    //  Actions publiques                                                 //
+    //  Actions publiques                                                  //
     // ================================================================== //
 
     /**
-     * Affiche la liste des cartes du client connecté.
-     * Accessible via {@code listerCartes.action}.
+     * Affiche la liste de toutes les cartes du client connecté.
+     * Point d'entrée de la page {@code GestionCartes.jsp}.
      */
     public String listerCartes() {
         chargerCartesClient();
@@ -157,13 +137,14 @@ public class CarteAction extends ActionSupport implements SessionAware {
     }
 
     /**
-     * Crée une nouvelle carte pour le compte {@link #numeroCompte} du client.
-     * Plafonds par défaut si non renseignés.
+     * Crée une nouvelle carte pour le compte {@link #numeroCompte}
+     * du client connecté.
      */
     public String creerCarte() {
         Client client = getClientConnecte();
         if (client == null) {
             addActionError("Session expirée. Veuillez vous reconnecter.");
+            chargerCartesClient();
             return ERROR;
         }
 
@@ -184,8 +165,8 @@ public class CarteAction extends ActionSupport implements SessionAware {
 
             carteManager.creerCarte(compte, paiementDiffere, plafondP, plafondR);
             addActionMessage("Carte créée avec succès pour le compte " + numeroCompte + ".");
-        } catch (Exception e) {
-            addActionError("Erreur lors de la création de la carte : " + e.getMessage());
+        } catch (TechnicalException | IllegalArgumentException e) {
+            addActionError("Erreur lors de la création : " + e.getMessage());
         }
 
         chargerCartesClient();
@@ -196,7 +177,7 @@ public class CarteAction extends ActionSupport implements SessionAware {
      * Bloque la carte identifiée par {@link #numeroCarte}.
      */
     public String bloquerCarte() {
-        carte = trouverCarte();
+        CarteBancaire carte = trouverCarte();
         if (carte == null) {
             addActionError("Carte introuvable.");
             chargerCartesClient();
@@ -204,8 +185,8 @@ public class CarteAction extends ActionSupport implements SessionAware {
         }
         try {
             carteManager.bloquerCarte(carte);
-            addActionMessage("Carte " + masquer(numeroCarte) + " bloquée.");
-        } catch (Exception e) {
+            addActionMessage("Carte bloquée avec succès.");
+        } catch (TechnicalException e) {
             addActionError("Impossible de bloquer la carte : " + e.getMessage());
         }
         chargerCartesClient();
@@ -216,7 +197,7 @@ public class CarteAction extends ActionSupport implements SessionAware {
      * Débloque la carte identifiée par {@link #numeroCarte}.
      */
     public String debloquerCarte() {
-        carte = trouverCarte();
+        CarteBancaire carte = trouverCarte();
         if (carte == null) {
             addActionError("Carte introuvable.");
             chargerCartesClient();
@@ -224,8 +205,8 @@ public class CarteAction extends ActionSupport implements SessionAware {
         }
         try {
             carteManager.debloquerCarte(carte);
-            addActionMessage("Carte " + masquer(numeroCarte) + " débloquée.");
-        } catch (Exception e) {
+            addActionMessage("Carte débloquée avec succès.");
+        } catch (TechnicalException e) {
             addActionError("Impossible de débloquer la carte : " + e.getMessage());
         }
         chargerCartesClient();
@@ -233,10 +214,10 @@ public class CarteAction extends ActionSupport implements SessionAware {
     }
 
     /**
-     * Bascule le mode de paiement (immédiat ↔ différé).
+     * Bascule le mode de paiement (immédiat ↔ différé) de la carte.
      */
     public String basculerMode() {
-        carte = trouverCarte();
+        CarteBancaire carte = trouverCarte();
         if (carte == null) {
             addActionError("Carte introuvable.");
             chargerCartesClient();
@@ -244,9 +225,9 @@ public class CarteAction extends ActionSupport implements SessionAware {
         }
         try {
             carteManager.basculerModePaiement(carte);
-            String nouveauMode = carte.isPaiementDiffere() ? "différé" : "immédiat";
-            addActionMessage("Mode de paiement changé en : " + nouveauMode + ".");
-        } catch (Exception e) {
+            String mode = carte.isPaiementDiffere() ? "différé" : "immédiat";
+            addActionMessage("Mode de paiement changé en : " + mode + ".");
+        } catch (TechnicalException e) {
             addActionError("Impossible de changer le mode : " + e.getMessage());
         }
         chargerCartesClient();
@@ -254,10 +235,10 @@ public class CarteAction extends ActionSupport implements SessionAware {
     }
 
     /**
-     * Modifie le plafond de paiement mensuel.
+     * Modifie le plafond mensuel de paiement de la carte.
      */
     public String modifierPlafondPaiement() {
-        carte = trouverCarte();
+        CarteBancaire carte = trouverCarte();
         if (carte == null) {
             addActionError("Carte introuvable.");
             chargerCartesClient();
@@ -268,7 +249,7 @@ public class CarteAction extends ActionSupport implements SessionAware {
             addActionMessage("Plafond de paiement mis à jour : " + nouveauPlafondPaiement + " €.");
         } catch (IllegalArgumentException e) {
             addActionError("Plafond invalide : " + e.getMessage());
-        } catch (Exception e) {
+        } catch (TechnicalException e) {
             addActionError("Erreur technique : " + e.getMessage());
         }
         chargerCartesClient();
@@ -276,10 +257,10 @@ public class CarteAction extends ActionSupport implements SessionAware {
     }
 
     /**
-     * Modifie le plafond de retrait mensuel.
+     * Modifie le plafond mensuel de retrait de la carte.
      */
     public String modifierPlafondRetrait() {
-        carte = trouverCarte();
+        CarteBancaire carte = trouverCarte();
         if (carte == null) {
             addActionError("Carte introuvable.");
             chargerCartesClient();
@@ -290,121 +271,36 @@ public class CarteAction extends ActionSupport implements SessionAware {
             addActionMessage("Plafond de retrait mis à jour : " + nouveauPlafondRetrait + " €.");
         } catch (IllegalArgumentException e) {
             addActionError("Plafond invalide : " + e.getMessage());
-        } catch (Exception e) {
+        } catch (TechnicalException e) {
             addActionError("Erreur technique : " + e.getMessage());
         }
         chargerCartesClient();
         return SUCCESS;
     }
 
-    /**
-     * Effectue un paiement par carte.
-     */
-    public String effectuerPaiement() {
-        carte = trouverCarte();
-        if (carte == null) {
-            addActionError("Carte introuvable.");
-            chargerCartesClient();
-            return ERROR;
-        }
-        try {
-            carteManager.effectuerPaiement(carte, montant);
-            addActionMessage("Paiement de " + montant + " € effectué avec la carte "
-                    + masquer(numeroCarte) + ".");
-        } catch (CarteBloqueException e) {
-            addActionError("La carte est bloquée.");
-            chargerCartesClient();
-            return CARTE_BLOQUEE;
-        } catch (PlafondDepasseException e) {
-            addActionError("Plafond mensuel dépassé.");
-            chargerCartesClient();
-            return PLAFOND_DEPASSE;
-        } catch (SoldeInsuffisantException e) {
-            addActionError("Solde insuffisant.");
-            chargerCartesClient();
-            return SOLDE_INSUFFISANT;
-        } catch (Exception e) {
-            addActionError("Erreur technique : " + e.getMessage());
-            chargerCartesClient();
-            return ERROR;
-        }
-        chargerCartesClient();
-        return SUCCESS;
+    // ================================================================== //
+    //  Getters / Setters (requis par Struts pour le binding)            //
+    // ================================================================== //
+
+    /** Exposé à la JSP via {@code connectedUser} pour afficher le nom. */
+    public Utilisateur getConnectedUser() {
+        return banque.getConnectedUser();
     }
 
-    /**
-     * Effectue un retrait ATM par carte.
-     */
-    public String effectuerRetrait() {
-        carte = trouverCarte();
-        if (carte == null) {
-            addActionError("Carte introuvable.");
-            chargerCartesClient();
-            return ERROR;
-        }
-        try {
-            carteManager.effectuerRetrait(carte, montant);
-            addActionMessage("Retrait de " + montant + " € effectué avec la carte "
-                    + masquer(numeroCarte) + ".");
-        } catch (CarteBloqueException e) {
-            addActionError("La carte est bloquée.");
-            chargerCartesClient();
-            return CARTE_BLOQUEE;
-        } catch (PlafondDepasseException e) {
-            addActionError("Plafond de retrait mensuel dépassé.");
-            chargerCartesClient();
-            return PLAFOND_DEPASSE;
-        } catch (SoldeInsuffisantException e) {
-            addActionError("Solde insuffisant.");
-            chargerCartesClient();
-            return SOLDE_INSUFFISANT;
-        } catch (Exception e) {
-            addActionError("Erreur technique : " + e.getMessage());
-            chargerCartesClient();
-            return ERROR;
-        }
-        chargerCartesClient();
-        return SUCCESS;
-    }
+    public String getNumeroCarte()                         { return numeroCarte; }
+    public void   setNumeroCarte(String numeroCarte)       { this.numeroCarte = numeroCarte; }
 
-    // ================================================================== //
-    //  Utilitaires                                                       //
-    // ================================================================== //
+    public String getNumeroCompte()                        { return numeroCompte; }
+    public void   setNumeroCompte(String numeroCompte)     { this.numeroCompte = numeroCompte; }
 
-    /**
-     * Masque les 8 chiffres centraux d'un numéro de carte.
-     * Ex : {@code 1234567890123456} → {@code 1234 **** **** 3456}
-     */
-    private String masquer(String num) {
-        if (num == null || num.length() < 16) return num;
-        return num.substring(0, 4) + " **** **** " + num.substring(12);
-    }
+    public double getNouveauPlafondPaiement()              { return nouveauPlafondPaiement; }
+    public void   setNouveauPlafondPaiement(double v)      { this.nouveauPlafondPaiement = v; }
 
-    // ================================================================== //
-    //  Getters / Setters (nécessaires pour Struts)                      //
-    // ================================================================== //
+    public double getNouveauPlafondRetrait()               { return nouveauPlafondRetrait; }
+    public void   setNouveauPlafondRetrait(double v)       { this.nouveauPlafondRetrait = v; }
 
-    public String getNumeroCarte()                    { return numeroCarte; }
-    public void   setNumeroCarte(String numeroCarte)  { this.numeroCarte = numeroCarte; }
+    public boolean isPaiementDiffere()                     { return paiementDiffere; }
+    public void    setPaiementDiffere(boolean v)           { this.paiementDiffere = v; }
 
-    public String getNumeroCompte()                   { return numeroCompte; }
-    public void   setNumeroCompte(String numeroCompte){ this.numeroCompte = numeroCompte; }
-
-    public double getMontant()                        { return montant; }
-    public void   setMontant(double montant)          { this.montant = montant; }
-
-    public double getNouveauPlafondPaiement()         { return nouveauPlafondPaiement; }
-    public void   setNouveauPlafondPaiement(double v) { this.nouveauPlafondPaiement = v; }
-
-    public double getNouveauPlafondRetrait()          { return nouveauPlafondRetrait; }
-    public void   setNouveauPlafondRetrait(double v)  { this.nouveauPlafondRetrait = v; }
-
-    public boolean isPaiementDiffere()                { return paiementDiffere; }
-    public void    setPaiementDiffere(boolean v)      { this.paiementDiffere = v; }
-
-    public List<CarteBancaire> getCartes()            { return cartes; }
-    public CarteBancaire       getCarte()             { return carte; }
-
-    public String  getMessageRetour()                 { return messageRetour; }
-    public boolean isErreur()                         { return erreur; }
+    public List<CarteBancaire> getCartes()                 { return cartes; }
 }

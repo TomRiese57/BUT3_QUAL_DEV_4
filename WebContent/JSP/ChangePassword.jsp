@@ -8,148 +8,121 @@
     <title>Changer le mot de passe</title>
     <link rel="stylesheet" href="/_00_ASBank2023/style/style.css" />
     <style>
-        .password-container {
-            max-width: 700px;
+        .pw-container {
+            max-width: 600px;
             margin: 2rem auto;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: var(--white);
+            padding: 2.25rem 2.5rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
         }
-        
-        .welcome-box {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-left: 4px solid #3b82f6;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            text-align: center;
+
+        .field-block {
+            margin-bottom: 1.125rem;
         }
-        
-        .welcome-box b {
-            color: #1e40af;
-        }
-        
-        .form-table {
-            width: 100%;
-            margin: 1.5rem 0;
-        }
-        
-        .form-table td {
-            padding: 1rem 0.5rem;
-            border: none;
-        }
-        
-        .form-table tr {
-            border: none;
-        }
-        
-        .form-table th {
-            background: transparent;
-            color: #1e3a8a;
-            text-align: left;
-            padding: 1rem 0;
+
+        .field-block label {
+            display: block;
+            font-size: 0.8125rem;
             font-weight: 600;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.375rem;
         }
-        
+
+        .field-block input {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1.5px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 0.9375rem;
+            font-family: inherit;
+            background: var(--white);
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+
+        .field-block input:focus {
+            outline: none;
+            border-color: var(--blue-600);
+            box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+        }
+
         .security-tips {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #f0f9ff;
-            border-radius: 12px;
-            border-left: 4px solid #0ea5e9;
+            margin-top: 1.5rem;
+            padding: 1.125rem 1.375rem;
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-left: 4px solid var(--blue-600);
+            border-radius: var(--radius-lg);
         }
-        
+
         .security-tips h3 {
-            color: #0369a1;
-            margin: 0 0 1rem 0;
-            font-size: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--blue-800);
+            margin-bottom: 0.625rem;
         }
-        
+
         .security-tips ul {
-            color: #0c4a6e;
-            margin: 0;
-            padding-left: 1.5rem;
-            text-align: left;
+            padding-left: 1.25rem;
+            color: var(--blue-900);
+            font-size: 0.875rem;
         }
-        
-        .security-tips li {
-            margin: 0.5rem 0;
-        }
+
+        .security-tips li { margin: 0.3rem 0; }
     </style>
 </head>
 <body>
+
     <div class="btnLogout">
         <s:form name="backForm" action="retourTableauDeBordClient" method="POST">
-            <s:submit name="Retour" value="← Retour au tableau de bord" />
+            <s:submit name="Retour" value="← Tableau de bord" />
         </s:form>
     </div>
 
     <h1>🔑 Modification du mot de passe</h1>
 
-    <div class="password-container">
+    <div class="pw-container">
+
         <s:if test="hasActionErrors()">
-            <div class="errors">
-                <s:actionerror />
-            </div>
+            <div class="errors"><s:actionerror /></div>
         </s:if>
-
         <s:if test="hasActionMessages()">
-            <div class="messages">
-                <s:actionmessage />
-            </div>
+            <div class="messages"><s:actionmessage /></div>
         </s:if>
 
-        <div class="welcome-box">
-            <p style="margin: 0;">Utilisateur : <b><s:property value="connectedUser.prenom" /> <s:property value="connectedUser.nom" /></b></p>
+        <div class="welcome-box" style="margin-bottom:1.75rem;">
+            <p style="margin:0;">
+                Utilisateur : <b><s:property value="connectedUser.prenom" /> <s:property value="connectedUser.nom" /></b>
+            </p>
         </div>
 
-        <s:form name="changePasswordForm" action="changePassword" method="POST">
-            <table class="form-table">
-                <thead>
-                    <tr>
-                        <th>Champ</th>
-                        <th>Valeur</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <label for="oldPassword">Ancien mot de passe :</label>
-                        </td>
-                        <td>
-                            <s:password name="oldPassword" id="oldPassword" required="true" 
-                                       placeholder="Votre mot de passe actuel"
-                                       style="width: 100%;" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="newPassword">Nouveau mot de passe :</label>
-                        </td>
-                        <td>
-                            <s:password name="newPassword" id="newPassword" required="true" 
-                                       placeholder="Votre nouveau mot de passe"
-                                       style="width: 100%;" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="confirmPassword">Confirmer le nouveau mot de passe :</label>
-                        </td>
-                        <td>
-                            <s:password name="confirmPassword" id="confirmPassword" required="true" 
-                                       placeholder="Confirmez votre mot de passe"
-                                       style="width: 100%;" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center; padding-top: 1.5rem;">
-                            <s:submit value="🔒 Modifier le mot de passe" style="width: 100%; padding: 1rem;" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <s:form name="changePasswordForm" action="changePassword" method="POST" theme="simple">
+
+            <div class="field-block">
+                <label for="oldPassword">Ancien mot de passe</label>
+                <input type="password" name="oldPassword" id="oldPassword"
+                       required placeholder="Votre mot de passe actuel" />
+            </div>
+
+            <div class="field-block">
+                <label for="newPassword">Nouveau mot de passe</label>
+                <input type="password" name="newPassword" id="newPassword"
+                       required placeholder="Votre nouveau mot de passe" />
+            </div>
+
+            <div class="field-block">
+                <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
+                <input type="password" name="confirmPassword" id="confirmPassword"
+                       required placeholder="Confirmez votre mot de passe" />
+            </div>
+
+            <div style="margin-top:1.5rem;">
+                <input type="submit" value="🔒 Modifier le mot de passe" style="width:100%; padding:.75rem;" />
+            </div>
+
         </s:form>
 
         <div class="security-tips">
@@ -161,8 +134,9 @@
                 <li>Ne réutilisez pas vos anciens mots de passe</li>
             </ul>
         </div>
+
     </div>
-    
+
     <jsp:include page="/JSP/Footer.jsp" />
 </body>
 </html>
