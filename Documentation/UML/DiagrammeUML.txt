@@ -1,28 +1,41 @@
 @startuml
-
-  abstract class Utilisateur {
+abstract class Utilisateur {
   - userId : String
   - userPwd : String
   - nom : String
   - prenom : String
   - adresse : String
   - male : boolean
+  + getNom() : String
+  + setNom(nom : String) : void
+  + getPrenom() : String
+  + setPrenom(prenom : String) : void
+  + getAdresse() : String
+  + setAdresse(adresse : String) : void
+  + isMale() : boolean
+  + setMale(male : boolean) : void
+  + getUserId() : String
+  + setUserId(userId : String) : void
+  + getUserPwd() : String
+  + setUserPwd(userPwd : String) : void
   + toString() : String
 }
 
 class Client {
   - numeroClient : String
   - accounts : Map<String, Compte>
-  + addAccount(compte : Compte)
-  + toString() : String
-  + setUserId(): String
+  + getNumeroClient() : String
+  + setNumeroClient(numeroClient : String) : void
+  + getAccounts() : Map<String, Compte>
+  + setAccounts(accounts : Map<String, Compte>) : void
+  + addAccount(compte : Compte) : void
   + getIdentity() : String
   + possedeComptesADecouvert() : boolean
   + getComptesAvecSoldeNonNul() : Map<String, Compte>
-  + checkFormatUserIdClient(s: String) : Boolean
-  + checkFormatNumeroClient(s: String) : Boolean
+  + checkFormatUserIdClient(s : String) : boolean
+  + checkFormatNumeroClient(s : String) : boolean
+  + toString() : String
 }
-
 
 class Gestionnaire {
   + toString() : String
@@ -32,43 +45,71 @@ class Banque {
   - clients : Map<String, Client>
   - gestionnaires : Map<String, Gestionnaire>
   - accounts : Map<String, Compte>
-  + debiter(compte : Compte, montant : double)
-  + crediter(compte : Compte, montant : double)
-  + deleteUser(userId : String)
-  + changeDecouvert(compte : CompteAvecDecouvert, nouveauDecouvert : double)
+  + getClients() : Map<String, Client>
+  + setClients(clients : Map<String, Client>) : void
+  + getGestionnaires() : Map<String, Gestionnaire>
+  + setGestionnaires(gestionnaires : Map<String, Gestionnaire>) : void
+  + getAccounts() : Map<String, Compte>
+  + setAccounts(accounts : Map<String, Compte>) : void
+  + debiter(compte : Compte, montant : double) : void
+  + crediter(compte : Compte, montant : double) : void
+  + deleteUser(userId : String) : void
+  + changeDecouvert(compte : CompteAvecDecouvert, nouveauDecouvert : double) : void
 }
 
 abstract class Compte {
   # numeroCompte : String
   # solde : double
   # owner : Client
-  + setNumerpCompte(numeroCompte : String)
-  + crediter(montant : double)
-  + debiter(montant : double)
+  + getSolde() : double
+  + getNumeroCompte() : String
+  + getOwner() : Client
+  + crediter(montant : double) : void
+  + debiter(montant : double) : void
+  + getClassName() : String
+  + checkFormatNumeroCompte(s : String) : boolean
   + toString() : String
 }
 
 class CompteAvecDecouvert {
   - decouvertAutorise : double
   + getDecouvertAutorise() : double
-  + setDecouverAutorise(decouvertAutorise : double)
-  + debiter(montant : double)
+  + setDecouverAutorise(decouvertAutorise : double) : void
+  + debiter(montant : double) : void
   + toString() : String
 }
 
 class CompteSansDecouvert {
-  + debiter(montant : double)
+  + debiter(montant : double) : void
   + toString() : String
 }
+
+class PasswordHasher {
+  + hashPassword(password : String) : String
+  + verify(password : String, storedHash : String) : boolean
+}
+
+class IllegalFormatException
+class IllegalOperationException
+class InsufficientFundsException
+class TechnicalException
 
 Utilisateur <|-- Client
 Utilisateur <|-- Gestionnaire
 Compte <|-- CompteAvecDecouvert
 Compte <|-- CompteSansDecouvert
+
 Client "1" o-- "*" Compte : accounts
 Compte "*" --> "1" Client : owner
 Banque "1" o-- "*" Client : clients
 Banque "1" o-- "*" Gestionnaire : gestionnaires
 Banque "1" o-- "*" Compte : accounts
 
+Utilisateur ..> PasswordHasher : utilise
+Client ..> IllegalFormatException : lance
+Compte ..> IllegalFormatException : lance
+Compte ..> InsufficientFundsException : lance
+CompteAvecDecouvert ..> IllegalOperationException : lance
+Banque ..> IllegalFormatException : lance
+Banque ..> IllegalOperationException : lance
 @enduml
