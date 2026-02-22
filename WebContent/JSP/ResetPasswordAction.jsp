@@ -44,15 +44,15 @@
                             cssStyle="width:100%;padding:.625rem .875rem;border:1.5px solid var(--gray-300);border-radius:var(--radius);font-size:.9375rem;font-family:inherit;background:var(--white);" />
             </div>
 
-            <%-- name="btnReset" au lieu de name="submit" (mot réservé Struts → erreur "Error setting expression 'submit'") --%>
-            <s:submit name="btnReset" value="Réinitialiser le mot de passe"
+            <%-- Omission de l'attribut name pour le bouton de soumission afin d'éviter l'erreur OGNL "Error setting expression..." dans Struts 2 --%>
+            <s:submit value="Réinitialiser le mot de passe"
                       cssStyle="width:100%;padding:.75rem;" />
 
         </s:form>
 
         <div style="margin-top:0.75rem;">
             <s:form name="retourLogin" action="redirectionLogin" method="POST">
-                <s:submit name="btnRetour" value="← Retour à la connexion"
+                <s:submit value="← Retour à la connexion"
                           cssStyle="width:100%;background:var(--gray-700);" />
             </s:form>
         </div>
