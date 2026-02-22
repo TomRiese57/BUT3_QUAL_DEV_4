@@ -3,9 +3,6 @@ package com.iut.banque.controller;
 import com.iut.banque.facade.BanqueFacade;
 import com.iut.banque.facade.CarteManager;
 import com.iut.banque.modele.CarteBancaire;
-import com.iut.banque.modele.CarteBancaire.CarteBloqueException;
-import com.iut.banque.modele.CarteBancaire.PlafondDepasseException;
-import com.iut.banque.modele.CarteBancaire.SoldeInsuffisantException;
 import com.iut.banque.modele.Client;
 import com.iut.banque.modele.Compte;
 import com.iut.banque.modele.Utilisateur;
@@ -31,6 +28,9 @@ import java.util.List;
 public class CarteAction extends ActionSupport {
 
     private static final long serialVersionUID = 1L;
+
+    // Constante pour éviter la duplication du littéral (Correction Issue 2)
+    private static final String ERREUR_CARTE_INTROUVABLE = "Carte introuvable.";
 
     // ------------------------------------------------------------------ //
     //  Beans Spring récupérés dans le constructeur                       //
@@ -62,8 +62,10 @@ public class CarteAction extends ActionSupport {
     //  Données exposées à la vue                                         //
     // ------------------------------------------------------------------ //
 
-    /** Liste de toutes les cartes du client connecté. */
-    private List<CarteBancaire> cartes = new ArrayList<>();
+    /** * Liste de toutes les cartes du client connecté.
+     * Ajout de "transient" pour empêcher la sérialisation (Correction Issue 1)
+     */
+    private transient List<CarteBancaire> cartes = new ArrayList<>();
 
     // ------------------------------------------------------------------ //
     //  Constructeur — injection Spring                                   //
@@ -179,7 +181,7 @@ public class CarteAction extends ActionSupport {
     public String bloquerCarte() {
         CarteBancaire carte = trouverCarte();
         if (carte == null) {
-            addActionError("Carte introuvable.");
+            addActionError(ERREUR_CARTE_INTROUVABLE);
             chargerCartesClient();
             return ERROR;
         }
@@ -199,7 +201,7 @@ public class CarteAction extends ActionSupport {
     public String debloquerCarte() {
         CarteBancaire carte = trouverCarte();
         if (carte == null) {
-            addActionError("Carte introuvable.");
+            addActionError(ERREUR_CARTE_INTROUVABLE);
             chargerCartesClient();
             return ERROR;
         }
@@ -219,7 +221,7 @@ public class CarteAction extends ActionSupport {
     public String basculerMode() {
         CarteBancaire carte = trouverCarte();
         if (carte == null) {
-            addActionError("Carte introuvable.");
+            addActionError(ERREUR_CARTE_INTROUVABLE);
             chargerCartesClient();
             return ERROR;
         }
@@ -240,7 +242,7 @@ public class CarteAction extends ActionSupport {
     public String modifierPlafondPaiement() {
         CarteBancaire carte = trouverCarte();
         if (carte == null) {
-            addActionError("Carte introuvable.");
+            addActionError(ERREUR_CARTE_INTROUVABLE);
             chargerCartesClient();
             return ERROR;
         }
@@ -262,7 +264,7 @@ public class CarteAction extends ActionSupport {
     public String modifierPlafondRetrait() {
         CarteBancaire carte = trouverCarte();
         if (carte == null) {
-            addActionError("Carte introuvable.");
+            addActionError(ERREUR_CARTE_INTROUVABLE);
             chargerCartesClient();
             return ERROR;
         }

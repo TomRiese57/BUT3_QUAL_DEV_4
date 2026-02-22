@@ -337,7 +337,7 @@
                     </div>
 
                     <div class="form-field">
-                        <label>&nbsp;</label>
+                        <label><input type="text" />&nbsp;</label>
                         <button type="submit" class="btn-create">🆕 Commander</button>
                     </div>
                 </div>
@@ -497,7 +497,7 @@
                                     <input type="hidden" name="numeroCarte"
                                            value="<s:property value='#c.numeroCarte' />" />
                                     <div class="inline-form">
-                                        <label style="font-size:.8rem;white-space:nowrap;">💳 Paiement</label>
+                                        <label style="font-size:.8rem;white-space:nowrap;"><input type="text" />💳 Paiement</label>
                                         <input type="number" name="nouveauPlafondPaiement"
                                                value="<s:property value='#c.plafondPaiement' />"
                                                />
@@ -509,7 +509,7 @@
                                     <input type="hidden" name="numeroCarte"
                                            value="<s:property value='#c.numeroCarte' />" />
                                     <div class="inline-form">
-                                        <label style="font-size:.8rem;white-space:nowrap;">🏧 Retrait</label>
+                                        <label style="font-size:.8rem;white-space:nowrap;"><input type="text" />🏧 Retrait</label>
                                         <input type="number" name="nouveauPlafondRetrait"
                                                value="<s:property value='#c.plafondRetrait' />"
                                                />

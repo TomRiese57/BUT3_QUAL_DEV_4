@@ -291,13 +291,6 @@ public class CarteManagerTest {
 
     @Test
     public void testDebiterTousMontantsDifferes_erreurSolde_continueLesAutres() throws Exception {
-        // c1 : solde 0 — le débit différé de 100 va échouer
-        FakeCompte c1Compte = new FakeCompte(0.0);
-        CarteBancaire c1 = new CarteBancaire(c1Compte, true,
-                CarteBancaire.PLAFOND_PAIEMENT_DEFAUT, CarteBancaire.PLAFOND_RETRAIT_DEFAUT);
-        // On force montantDiffereEnAttente manuellement via une méthode publique fictive :
-        // impossible sans réflexion — on utilise effectuerPaiement mais le FakeCompte
-        // accepte 0€ de débit différé. On crée un compte avec 100 puis on vide le solde.
         FakeCompte c1ComptePlein = new FakeCompte(100.0);
         CarteBancaire c1bis = new CarteBancaire(c1ComptePlein, true,
                 CarteBancaire.PLAFOND_PAIEMENT_DEFAUT, CarteBancaire.PLAFOND_RETRAIT_DEFAUT);

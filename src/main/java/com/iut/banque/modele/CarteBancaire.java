@@ -287,12 +287,15 @@ public class CarteBancaire {
      */
     private static String genererNumeroCarte() {
         long raw = Math.abs(UUID.randomUUID().getMostSignificantBits());
-        String s = Long.toString(raw);
-        // Padder ou tronquer pour obtenir exactement 16 chiffres
-        while (s.length() < 16) {
-            s = s + "0";
+        StringBuilder sb = new StringBuilder(Long.toString(raw));
+
+        // Utilisation de StringBuilder pour le padding (plus performant)
+        while (sb.length() < 16) {
+            sb.append("0");
         }
-        return s.substring(0, 16);
+
+        // Tronquer si nécessaire et retourner la String
+        return sb.substring(0, 16);
     }
 
     private void validerMontant(double montant) {

@@ -121,12 +121,12 @@ public class CarteBancaireTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreation_plafondPaiementNegatif_lanceException() throws Exception {
+    public void testCreation_plafondPaiementNegatif_lanceException() {
         new CarteBancaire(compteRiche, false, -100, 500);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreation_plafondRetraitZero_lanceException() throws Exception {
+    public void testCreation_plafondRetraitZero_lanceException() {
         new CarteBancaire(compteRiche, false, 3000, 0);
     }
 
