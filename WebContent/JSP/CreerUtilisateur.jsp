@@ -163,7 +163,7 @@
 
             <!-- Sexe — radios HTML natifs pour éviter le bug Struts -->
             <div class="field-block" style="margin-bottom:1rem;">
-                <label><input type="text" />Sexe</label>
+                <span class="group-label">Sexe</span>
                 <div class="radio-row">
                     <label>
                         <input type="radio" name="male" value="true" checked="checked" />
@@ -178,7 +178,7 @@
 
             <!-- Type — radios HTML natifs -->
             <div class="field-block" style="margin-bottom:1rem;">
-                <label><input type="text" />Type d'utilisateur</label>
+                <span class="group-label">Type d'utilisateur</span>
                 <div class="radio-row">
                     <label>
                         <input type="radio" name="client" value="true" checked="checked" />

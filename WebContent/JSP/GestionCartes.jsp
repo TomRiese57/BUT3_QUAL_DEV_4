@@ -337,7 +337,7 @@
                     </div>
 
                     <div class="form-field">
-                        <label><input type="text" />&nbsp;</label>
+                        <span class="spacer" aria-hidden="true">&nbsp;</span>
                         <button type="submit" class="btn-create">🆕 Commander</button>
                     </div>
                 </div>
@@ -497,10 +497,9 @@
                                     <input type="hidden" name="numeroCarte"
                                            value="<s:property value='#c.numeroCarte' />" />
                                     <div class="inline-form">
-                                        <label style="font-size:.8rem;white-space:nowrap;"><input type="text" />💳 Paiement</label>
-                                        <input type="number" name="nouveauPlafondPaiement"
-                                               value="<s:property value='#c.plafondPaiement' />"
-                                               />
+                                        <label for="plafondPaiement_<s:property value='#c.numeroCarte' />" style="font-size:.8rem;white-space:nowrap;">💳 Paiement</label>
+                                        <input type="number" id="plafondPaiement_<s:property value='#c.numeroCarte' />" name="nouveauPlafondPaiement"
+                                               value="<s:property value='#c.plafondPaiement' />" />
                                         <button type="submit" class="btn-small">OK</button>
                                     </div>
                                 </s:form>
@@ -509,10 +508,9 @@
                                     <input type="hidden" name="numeroCarte"
                                            value="<s:property value='#c.numeroCarte' />" />
                                     <div class="inline-form">
-                                        <label style="font-size:.8rem;white-space:nowrap;"><input type="text" />🏧 Retrait</label>
-                                        <input type="number" name="nouveauPlafondRetrait"
-                                               value="<s:property value='#c.plafondRetrait' />"
-                                               />
+                                        <label for="plafondRetrait_<s:property value='#c.numeroCarte' />" style="font-size:.8rem;white-space:nowrap;">🏧 Retrait</label>
+                                        <input type="number" id="plafondRetrait_<s:property value='#c.numeroCarte' />" name="nouveauPlafondRetrait"
+                                               value="<s:property value='#c.plafondRetrait' />" />
                                         <button type="submit" class="btn-small">OK</button>
                                     </div>
                                 </s:form>

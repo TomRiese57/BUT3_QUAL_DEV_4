@@ -60,7 +60,7 @@
             </div>
             
             <div class="form-section">
-                <label><input type="text" />Type de compte :</label>
+                <span class="group-label">Type de compte</span>
                 <s:radio label="" name="avecDecouvert"
                     list="#{false:'Compte sans découvert',true:'Compte avec découvert'}"
                     value="false" />

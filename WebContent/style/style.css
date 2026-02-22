@@ -273,13 +273,14 @@ form {
     /* max-width intentionnellement absent */
 }
 
-label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
+.field-block label,
+.field-block .group-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
     color: var(--gray-700);
-    margin-bottom: 0.375rem;
-    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0;
 }
 
 input[type="text"],
