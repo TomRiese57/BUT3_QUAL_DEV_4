@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <footer>
     <p style="margin: 0.25rem 0; font-weight: 600; color: white;">
-        🎓 Projet BUT-3A / 2023-2024
+        🎓 Projet BUT-3A / 2025-2026
     </p>
 </footer>

@@ -109,7 +109,7 @@
             </div>
             
             <div class="footer-info">
-                <p>Projet BUT-3A / 2023-2024</p>
+                <p>Projet BUT-3A / 2025-2026</p>
             </div>
         </div>
     </div>

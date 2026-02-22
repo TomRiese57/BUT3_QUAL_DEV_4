@@ -7,92 +7,62 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Réinitialisation du mot de passe</title>
     <link rel="stylesheet" href="/_00_ASBank2023/style/style.css" />
-    <style>
-        .reset-container {
-            max-width: 500px;
-            margin: 3rem auto;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .reset-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .reset-header h2 {
-            color: #1e3a8a;
-            margin: 0;
-        }
-        
-        .reset-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .info-note {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 12px;
-            text-align: center;
-            color: #64748b;
-            font-size: 0.875rem;
-        }
-    </style>
 </head>
 <body>
     <h1>🔑 Réinitialisation du mot de passe</h1>
-    
-    <div class="reset-container">
-        <div class="reset-header">
-            <div class="reset-icon">🔓</div>
+
+    <div class="login-container">
+
+        <div class="login-header">
+            <div class="login-icon">🔓</div>
             <h2>Nouveau mot de passe</h2>
         </div>
-        
+
         <s:actionerror cssClass="errors" />
         <s:actionmessage cssClass="messages" />
-        
-        <s:form name="resetForm" action="resetPassword" method="POST">
-            <div class="form-group">
-                <s:textfield label="Code utilisateur" name="userCde" 
-                            placeholder="Votre code utilisateur" />
+
+        <s:form name="resetForm" action="resetPassword" method="POST" theme="simple">
+
+            <div class="field-block" style="margin-bottom:1rem;">
+                <label for="userCde">Code utilisateur</label>
+                <s:textfield name="userCde" id="userCde"
+                             placeholder="Votre code utilisateur"
+                             cssStyle="width:100%;padding:.625rem .875rem;border:1.5px solid var(--gray-300);border-radius:var(--radius);font-size:.9375rem;font-family:inherit;background:var(--white);" />
             </div>
-            
-            <div class="form-group">
-                <s:password label="Nouveau mot de passe" name="newPassword" 
-                           placeholder="Minimum 6 caractères" />
+
+            <div class="field-block" style="margin-bottom:1rem;">
+                <label for="newPassword">Nouveau mot de passe</label>
+                <s:password name="newPassword" id="newPassword"
+                            placeholder="Minimum 6 caractères"
+                            cssStyle="width:100%;padding:.625rem .875rem;border:1.5px solid var(--gray-300);border-radius:var(--radius);font-size:.9375rem;font-family:inherit;background:var(--white);" />
             </div>
-            
-            <div class="form-group">
-                <s:password label="Confirmer le mot de passe" name="confirmPassword" 
-                           placeholder="Confirmez votre mot de passe" />
+
+            <div class="field-block" style="margin-bottom:1.5rem;">
+                <label for="confirmPassword">Confirmer le mot de passe</label>
+                <s:password name="confirmPassword" id="confirmPassword"
+                            placeholder="Confirmez votre mot de passe"
+                            cssStyle="width:100%;padding:.625rem .875rem;border:1.5px solid var(--gray-300);border-radius:var(--radius);font-size:.9375rem;font-family:inherit;background:var(--white);" />
             </div>
-            
-            <div style="margin-top: 2rem;">
-                <s:submit name="submit" value="Réinitialiser le mot de passe" 
-                         style="width: 100%; padding: 1rem;" />
-            </div>
+
+            <%-- name="btnReset" au lieu de name="submit" (mot réservé Struts → erreur "Error setting expression 'submit'") --%>
+            <s:submit name="btnReset" value="Réinitialiser le mot de passe"
+                      cssStyle="width:100%;padding:.75rem;" />
+
         </s:form>
-        
-        <div style="margin-top: 1.5rem;">
+
+        <div style="margin-top:0.75rem;">
             <s:form name="retourLogin" action="redirectionLogin" method="POST">
-                <s:submit name="Retour" value="← Retour à la connexion" 
-                         style="width: 100%; background: linear-gradient(135deg, #64748b 0%, #475569 100%);" />
+                <s:submit name="btnRetour" value="← Retour à la connexion"
+                          cssStyle="width:100%;background:var(--gray-700);" />
             </s:form>
         </div>
-        
-        <div class="info-note">
+
+        <div class="security-note">
             🔒 Saisissez votre code utilisateur et choisissez un nouveau mot de passe
         </div>
+
     </div>
-    
+
     <jsp:include page="/JSP/Footer.jsp" />
 </body>
 </html>
